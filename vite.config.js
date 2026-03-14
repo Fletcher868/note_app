@@ -1,11 +1,18 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  base: './', 
+  base: './',
+  server: {
+    host: true, // allow access from network
+    port: 5173, // optional, default dev server port
+    strictPort: false, // optional
+    allowedHosts: [
+      'pam-unhideous-chastenedly.ngrok-free.dev'
+    ],
+  },
   build: {
-    chunkSizeWarningLimit: 1000, // Increase limit to 1MB to stop the warning
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
@@ -15,11 +22,8 @@ export default defineConfig({
         contact: resolve(__dirname, 'contact.html'),
       },
       output: {
-        // This splits your code into "App logic" and "Library logic"
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+          if (id.includes('node_modules')) return 'vendor';
         }
       }
     },
