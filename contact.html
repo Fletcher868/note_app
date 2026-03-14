@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support - VeroNote</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <!-- Google Fonts: Inter (Required for Logo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 1rem;
+            --container: 1200px;
+        }
+
+        /* --- RESET & TYPOGRAPHY --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container { max-width: var(--container); margin: 0 auto; padding: 0 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 4rem; }
+        .hidden-mobile { display: none; }
+        .items-center { align-items: center; }
+        
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .hidden-mobile { display: flex; }
+            .mobile-menu-btn { display: none; }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            display: flex; align-items: center;
+        }
+        .nav-inner { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* --- LOGO STYLE A (Updated) --- */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 32px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+            color: #3b82f6; /* Primary Blue */
+            fill: currentColor;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .logo-link:hover .logo-icon {
+            transform: scale(1.1) rotate(-5deg);
+            color: #2563eb; /* Darker Blue */
+        }
+
+        .logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 26px; /* Visual height match */
+            line-height: 1;
+            font-weight: 800;
+            color: #0f172a; /* Slate 900 */
+            letter-spacing: -0.04em;
+            white-space: nowrap;
+        }
+
+        .logo-text span {
+            color: #3b82f6;
+        }
+        /* ------------------------------------- */
+
+        .nav-links { gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: #3b82f6; }
+        .btn-nav { background: #3b82f6; color: white !important; padding: 0.5rem 1rem; border-radius: 99px; }
+        .btn-nav:hover { background: var(--primary-hover); }
+
+        /* --- CONTACT SECTION --- */
+        .contact-wrapper { padding-top: 140px; padding-bottom: 80px; }
+        
+        .contact-info h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--text-main); }
+        .contact-info p { font-size: 1.125rem; color: var(--text-muted); margin-bottom: 2rem; }
+        
+        .info-card {
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;
+        }
+        .info-icon { 
+            width: 40px; height: 40px; background: #eff6ff; color: #3b82f6; 
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .info-text h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .info-text p { font-size: 0.95rem; color: var(--text-muted); margin: 0; }
+        .info-text a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+
+        /* --- FORM --- */
+        .contact-form {
+            background: white; padding: 2.5rem; border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+        .form-input, .form-textarea {
+            width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border);
+            border-radius: 0.75rem; font-size: 1rem; font-family: inherit;
+            transition: all 0.2s; background: #f8fafc;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none; border-color: #3b82f6; background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .btn-submit {
+            width: 100%; background: #3b82f6; color: white; border: none;
+            padding: 1rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-hover); }
+
+        /* --- FOOTER --- */
+        footer { border-top: 1px solid var(--border); background: white; padding: 4rem 0 2rem; text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin: 2rem 0; font-size: 0.9rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; }
+        .footer-links a:hover { color: #3b82f6; }
+        .copyright { color: #94a3b8; font-size: 0.875rem; }
+        /* --- MOBILE MENU STYLES --- */
+@media (max-width: 767px) {
+    .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 2rem;
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow-lg);
+        gap: 1.5rem;
+        z-index: 99;
+    }
+    
+    /* Override the helper class when menu is open */
+    .nav-links.mobile-open.hidden-mobile {
+        display: flex; 
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <!-- UPDATED LOGO: Style A -->
+            <a href="/" class="logo-link">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M19.003 7.503L14.505 3h-8.5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-11.5zm-5-2l2.5 2.5h-2.5v-2.5z" fill="currentColor"/>
+                    <path d="M8 11h8v2H8zm0 4h5v2H8z" fill="white"/>
+                </svg>
+                <div class="logo-text">Vero<span>Note</span></div>
+            </a>
+            
+            <div class="nav-links hidden-mobile items-center">
+                <a href="index.html">Home</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="#" class="active">Contact</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html" class="btn-nav">Back to Notes</a>
+            </div>
+
+            <div class="mobile-menu-btn">
+                <svg width="24" height="24" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container contact-wrapper">
+        <div class="grid-2">
+            
+            <!-- Left Column: Info -->
+            <div class="contact-info">
+                <h1>Get in touch</h1>
+                <p>Have questions about security, pricing, or features? We're here to help you get the most out of VeroNote.</p>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div class="info-text">
+                        <h3>Email Support</h3>
+                        <p>Our team usually responds within 24 hours.</p>
+                        <a href="mailto:support@Veronote.com">support@Veronote.com</a>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="info-text">
+                        <h3>Help Center</h3>
+                        <p>Find answers instantly in our docs.</p>
+                        <a href="faq.html">Visit FAQ &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Form -->
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We have received your message.');">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" placeholder="Your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="you@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" class="form-input" placeholder="How can we help?" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-textarea" rows="5" placeholder="Tell us more about your inquiry..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 1rem;">
+                VeroNote
+            </div>
+            <p class="copyright">© 2026 VeroNote. All rights reserved.</p>
+        </div>
+    </footer>
+<script>
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            // Toggle the class that applies the mobile styles
+            navLinks.classList.toggle('mobile-open');
+            // Toggle the utility class that hides it
+            navLinks.classList.toggle('hidden-mobile');
+        });
+    }
+</script>
+</body>
+</html>

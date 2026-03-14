@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VeroNote | End-to-End Encrypted Notes</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Favicon -->
+ <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="MyWebSite" />
+<link rel="manifest" href="/favicon/site.webmanifest" />
+  <!-- Description (important for SEO) -->
+  <meta name="description" content="VeroNote: Secure, end-to-end encrypted note-taking app. Private notes with AES-GCM 256-bit encryption, Zero-knowledge, no tracking, and version history.">
+  <!-- Keywords – 2025 optimized for VeroNote -->
+  <meta name="keywords" content="encrypted notes, secure notes app, private note taking, end-to-end encrypted notes, e2ee notes, zero knowledge notes, aes-256 notes, offline notes app, open source notes, privacy focused notes, secure notepad, encrypted notepad, version history notes, standard notes alternative, joplin alternative, obsidian alternative, evernote alternative secure">
+  <meta name="author" content="VeroNote">
+
+  <style>
+    .btn-icon { width:18px; height:18px; vertical-align:middle; fill:currentColor; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+<div class="sb-head">
+<a href="/" class="logo-link">
+  <!-- Style A: Sticky Note Icon -->
+  <svg class="logo-icon" viewBox="0 0 24 24">
+    <use href="#icon-logo"/>
+  </svg>
+  <div class="logo-text">Vero<span>Note</span></div>
+</a>
+      </div>
+
+      <div id="openSearchBtn" class="search-fade">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span>Search notes...</span>
+</div>
+      <div id="filesList" class="files"></div>
+      
+      <div class="sb-profile">
+        <!-- Profile Button with Dots -->
+        <button id="profileBtn" class="profile-btn">
+          <div class="avatar">U</div>
+          <div class="info">
+            <div class="name" title="Guest User">Guest User</div>
+            <div class="status guest">Guest</div>
+          </div>
+          <div class="profile-dots">⋯</div>
+        </button>
+        
+        <div id="profileDropdown" class="profile-dropdown hidden">
+        
+          <!-- === GUEST MENU (Logged Out) === -->
+          <div id="menuDefault" class="dropdown-content">
+            <div class="menu-section">
+              <button id="loginBtn" class="dropdown-item">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-login"/></svg></div>
+                <span>Log in</span>
+              </button>
+              <button id="signupBtn" class="dropdown-item">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-user"/></svg></div>
+                <span>Sign up</span>
+              </button>
+            </div>
+
+            <div class="menu-divider"></div>
+
+            <div class="menu-section">
+              <button class="dropdown-item dropdown-option">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-help"/></svg></div>
+                <span>Help & Pricing</span>
+                <span class="arrow-right">›</span>
+                
+                <!-- Submenu -->
+                <div class="submenu">
+                  <a href="pricing.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-pricing"/></svg> Pricing
+                  </a>
+                  <a href="faq.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-faq"/></svg> FAQ
+                  </a>
+                  <a href="contact.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-contact"/></svg> Contact
+                  </a>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- === USER MENU (Logged In) === -->
+          <div id="menuLoggedIn" class="dropdown-content hidden">
+            
+<!-- Section 1: Premium CTA -->
+            <div class="menu-section">
+              <a href="pricing.html" id="upgradeBtn" class="dropdown-item upgrade-item" style="display:none; text-decoration: none;">
+                <div class="icon-box special"><svg class="btn-icon"><use href="#icon-crown"/></svg></div>
+                <div class="text-col">
+                  <span class="item-title">Upgrade to Pro</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- Section 2: Tools -->
+            <div class="menu-section">
+              <button id="settingsBtn" class="dropdown-item">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-settings"/></svg></div>
+                <span>Settings</span>
+              </button>
+            </div>
+
+            <div class="menu-divider"></div>
+
+            <!-- Section 3: Support & Logout -->
+            <div class="menu-section">
+              <button class="dropdown-item dropdown-option">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-help"/></svg></div>
+                <span>Help & Pricing</span>
+                <span class="arrow-right">›</span>
+                <div class="submenu">
+                  <a href="pricing.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-pricing"/></svg> Plans
+                  </a>
+                  <a href="faq.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-faq"/></svg> FAQ
+                  </a>
+                  <a href="contact.html" class="dropdown-item">
+                    <svg class="btn-icon"><use href="#icon-contact"/></svg> Contact
+                  </a>
+                </div>
+              </button>
+              
+              <button id="logoutBtn" class="dropdown-item danger-item">
+                <div class="icon-box"><svg class="btn-icon"><use href="#icon-logout"/></svg></div>
+                <span>Log out</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- === FORMS (Login / Signup) === -->
+          <!-- Login Form -->
+          <div id="loginForm" class="dropdown-content form-content hidden">
+            <div class="form-header">
+              <h4>Welcome back</h4>
+              <p>Log in to sync your notes</p>
+            </div>
+            <div class="input-group">
+              <input type="email" id="loginEmail" placeholder="name@example.com" required />
+            </div>
+            <div class="input-group">
+              <input type="password" id="loginPassword" placeholder="Password" required />
+            </div>
+            <div class="form-actions-stacked">
+              <button id="submitLogin" class="btn-primary">Log in</button>
+              <button id="backToMenu" class="btn-menu">Cancel</button>
+            </div>
+          </div>
+
+<!-- Signup Form -->
+          <div id="signupForm" class="dropdown-content form-content hidden">
+            <div class="form-header">
+              <h4>Create Account</h4>
+            </div>
+            
+            <!-- START: E2EE WARNING -->
+<div class="offline-message" style="margin-bottom: 12px;">
+  <!-- Lock icon -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <use href="#icon-lock"/>
+  </svg>
+  <div class="offline-text">
+            <strong>Critical Warning:</strong>
+            <small>Your notes are end-to-end encrypted.If you lose your password, we cannot recover your account or notes.
+</small>
+
+              </div>
+            </div>
+            <!-- END: E2EE WARNING -->
+            
+            <div class="input-group">
+              <!-- Changed placeholder from "Full Name" to "Username" -->
+              <input type="text" id="signupName" placeholder="Username" required />
+            </div>
+            <div class="input-group">
+              <input type="email" id="signupEmail" placeholder="Email" required />
+            </div>
+            <div class="input-group">
+              <!-- Updated placeholder for complexity rule -->
+              <input type="password" id="signupPassword" placeholder="Create Password (min 10 chars)" required />
+            </div>
+            <!-- ADDED CONFIRM PASSWORD FIELD -->
+            <div class="input-group">
+                <input type="password" id="signupPasswordConfirm" placeholder="Confirm Password" required />
+            </div>
+            <div class="form-actions-stacked">
+              <button id="submitSignup" class="btn-primary">Create Account</button>
+              <button id="backToMenuSignup" class="btn-menu">Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </aside>
+
+   <!-- Workspace -->
+    <main class="workspace">
+      
+<!-- LEFT: Toolbar + Editor (ONE container, full height) -->
+<div class="editor-container">
+  <!-- NEW: Editor Loading Overlay -->
+  <div id="editorLoader" class="editor-loader hidden">
+    <div class="spinner-circle"></div>
+    <span>Decrypting Note...</span>
+  </div>
+  <!-- Empty State Overlay -->
+<div id="emptyState" class="empty-state-overlay hidden">
+  <div class="empty-state-content">
+    <div class="empty-icon-circle">
+      <svg id="emptyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <!-- SVG content will be injected by JS -->
+      </svg>
+    </div>
+    <h3 id="emptyTitle">No Note Selected</h3>
+    <p id="emptyMessage">Select a note from the sidebar or create a new one to get started.</p>
+    <button id="emptyStateBtn" class="st-btn-primary">
+      Create New Note
+    </button>
+  </div>
+</div>
+<!-- === MOBILE HEADER (Visible only on < 768px) === -->
+<div class="mobile-header">
+  <!-- Menu Button -->
+  <button id="mobileMenuBtn" class="mobile-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+  
+  <!-- Logo (Reused from Sidebar) -->
+  <a href="/" class="logo-link mobile-logo">
+    <svg class="logo-icon" viewBox="0 0 24 24">
+      <use href="#icon-logo"/>
+    </svg>
+    <div class="logo-text">Vero<span>Note</span></div>
+  </a>
+  
+  <!-- Info/Right Sidebar Button -->
+  <button id="mobileInfoBtn" class="mobile-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+  </button>
+</div>
+
+<!-- === MODE 1: PLAIN TEXT === -->
+  <div id="plainWrapper" class="editor-mode-wrapper">
+    <!-- TOOLBAR -->
+<!-- TOOLBAR -->
+    <div class="toolbar-container">
+      <div class="toolbar-slider">
+        
+        <!-- GROUP 1: Undo / Redo -->
+        <div class="btn-group">
+          <button id="undoBtn" class="rich-btn-item"  title="Undo">
+            <svg class="btn-icon"><use href="#icon-undo"/></svg>
+            <span class="btn-text">Undo</span>
+          </button>
+          <button id="redoBtn" class="rich-btn-item"  title="Redo">
+            <svg class="btn-icon"><use href="#icon-redo"/></svg>
+            <span class="btn-text">Redo</span>
+          </button>
+        </div>
+
+        <!-- GROUP 2: Clipboard (With NEW ICONS) -->
+        <div class="btn-group">
+          <!-- Copy -->
+          <button id="copyBtn" class="rich-btn-item" title="Copy">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.66667 15.3333V19.3333C8.66667 20.8061 9.86057 22 11.3333 22H19.3333C20.8061 22 22 20.8061 22 19.3333V11.3333C22 9.86057 20.8061 8.66667 19.3333 8.66667H15.3333M4.66667 15.3333H12.6667C14.1394 15.3333 15.3333 14.1394 15.3333 12.6667V4.66667C15.3333 3.19391 14.1394 2 12.6667 2H4.66667C3.19391 2 2 3.19391 2 4.66667V12.6667C2 14.1394 3.19391 15.3333 4.66667 15.3333Z" stroke="#111827" stroke-width="1.6" stroke-linecap="round" class="my-path"></path>
+            </svg>
+            <span class="btn-text">Copy</span>
+          </button>
+
+          <!-- Cut -->
+          <button id="cutBtn" class="rich-btn-item" title="Cut">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.52464 15.8155C9.58965 17.0908 9.4241 18.9922 8.15487 20.0624C6.88565 21.1325 4.99338 20.9661 3.92838 19.6908C2.86337 18.4155 3.02892 16.5141 4.29815 15.4439C5.56737 14.3738 7.45964 14.5401 8.52464 15.8155ZM8.52464 15.8155L19.2493 6.77307" stroke="#111827" stroke-width="1.6" stroke-linecap="round" class="my-path"></path>
+              <path d="M8.71703 8.18449C7.65202 9.45984 5.75975 9.62619 4.49053 8.55605C3.22131 7.48591 3.05575 5.58452 4.12076 4.30917C5.18576 3.03383 7.07803 2.86748 8.34726 3.93762C9.61648 5.00776 9.78203 6.90915 8.71703 8.18449ZM8.71703 8.18449L19.4416 17.2269" stroke="#111827" stroke-width="1.6" stroke-linecap="round" class="my-path"></path>
+              <path d="M17 12H19M21 12H22" stroke="#111827" stroke-width="1.6" stroke-linecap="round" class="my-path"></path>
+            </svg>
+            <span class="btn-text">Cut</span>
+          </button>
+
+        </div>
+
+        <!-- GROUP 3: Editing Tools -->
+        <div class="btn-group">
+          <button id="selectAllBtn" class="rich-btn-item" title="Select All">
+            <svg class="btn-icon"><use href="#icon-select-all"/></svg>
+            <span class="btn-text">Select All</span>
+          </button>
+          <button id="findDockBtn" class="rich-btn-item" title="Find">
+            <svg class="btn-icon"><use href="#icon-search"/></svg>
+            <span class="btn-text">Find</span>
+          </button>
+          <button id="replaceDockBtn" class="rich-btn-item" title="Replace">
+            <svg class="btn-icon"><use href="#icon-replace"/></svg>
+            <span class="btn-text">Replace</span>
+          </button>
+        </div>
+          
+        <!-- Tools Dropdown (Kept separate or grouped) -->
+        <div class="tools-dropdown">
+         <button id="toolsMenuBtn" class="rich-btn-item" style="border-radius: 8px;">
+          <svg class="btn-icon"><use href="#icon-tools"/></svg>
+          <span class="btn-text">Tools</span>
+          <svg class="btn-icon" style="margin-left:4px; width:12px;"><use href="#icon-chevron-down"/></svg>
+        </button>
+<div id="toolsDropdown" class="tools-dropdown-content hidden">
+            <button id="tool_remove_duplicates" class="tool-vertical-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Remove Duplicates
+            </button>
+            <button id="tool_sort_lines" class="tool-vertical-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6h18M3 12h12M3 18h6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Sort Lines
+            </button>
+            <button id="tool_remove_empty_lines" class="tool-vertical-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10H3M21 6H3M21 14H3M21 18H3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 2L18 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.5"/>
+              </svg>
+              Remove Empty Lines
+            </button>
+          </div>
+        </div>
+
+<!-- EDITOR MODE SWITCHER (Plain Toolbar) -->
+<!-- EDITOR MODE SWITCHER -->
+<div class="tools-dropdown ml-auto">
+  <!-- Trigger -->
+  <button id="editorModeTriggerPlain" class="rich-btn-item" style="border-radius: 8px; gap: 8px; min-width: 145px; justify-content: flex-start;">
+    <!-- NEW: Dynamic Icon Container -->
+    <svg class="btn-icon mode-icon-trigger"><use href="#icon-text-plain"/></svg>
+    <span class="current-mode-label" style="flex: 1; text-align: left;">Plain Text</span>
+    <svg class="btn-icon" style="margin: 0; opacity: 0.5;"><use href="#icon-chevron-down"/></svg>
+  </button>
+  
+  <!-- The Dropdown Menu -->
+  <div id="editorModeDropdownPlain" class="tools-dropdown-content hidden">
+    
+    <!-- OPTION 1: PLAIN TEXT -->
+    <button class="tool-vertical-btn mode-option" data-mode="plain">
+      <svg class="btn-icon"><use href="#icon-text-plain"/></svg>
+      <span>Plain Text</span>
+      <svg class="mode-check-icon"><use href="#icon-check"/></svg>
+    </button>
+
+    <!-- OPTION 2: SUPER EDITOR -->
+    <button class="tool-vertical-btn mode-option" data-mode="rich">
+      <div style="display:flex; align-items:center; gap:10px; flex:1;">
+        <svg class="btn-icon" style="color: #d97706;"><use href="#icon-text-rich"/></svg>
+        <span>Super Editor</span>
+        <svg class="lock-icon" style="width:12px; height:12px; opacity:0.6;"><use href="#icon-lock"/></svg>
+      </div>
+      <svg class="mode-check-icon"><use href="#icon-check"/></svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+    <!-- Existing Editor & Find Dock -->
+    <div class="editor-left">
+      <textarea id="textEditor" placeholder="Write or edit your text here..."></textarea>
+      <!-- Find/Replace Dock (Kept exactly as is) -->
+      <div id="findDock" class="find-dock hidden" role="region" aria-label="Find and Replace">
+        <div class="find-dock-row">
+          <input id="dock_find" type="text" placeholder="Find..." />
+          <input id="dock_replace" type="text" placeholder="Replace with..." />
+          <label class="dock-checkbox"><input id="dock_regex" type="checkbox" /> Regex</label>
+          <button id="dock_find_btn">Find</button>
+          <button id="dock_replace_btn">Replace</button>
+          <button id="dock_replace_all_btn">Replace All</button>
+          <button id="dock_close" class="close-btn" title="Close">X</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- === MODE 2: RICH TEXT (TipTap) === -->
+<div id="richWrapper" class="editor-mode-wrapper hidden">
+  <!-- Rich Toolbar -->
+  <div class="toolbar-container">
+    <div class="toolbar-slider">
+      <!-- Added 'simple-toolbar' for layout and 'rich-panel' for specific styling -->
+      <div class="toolbar-panel rich-panel simple-toolbar" id="tiptapToolbar">
+        
+        <!-- Group 1: History -->
+        <div class="rich-btn-group">
+          <button id="ttUndo" class="rich-btn-item" title="Undo">
+            <svg class="btn-icon"><use href="#icon-undo"/></svg>
+          </button>
+          <button id="ttRedo" class="rich-btn-item" title="Redo">
+            <svg class="btn-icon"><use href="#icon-redo"/></svg>
+          </button>
+        </div>
+
+        <!-- Group 2: Headings (Dropdown) -->
+        <div class="rich-btn-group">
+           <div class="dropdown" id="headingDropdown">
+            <button class="rich-btn-item rich-dropdown-trigger dropdown-trigger">
+              <span id="currentHeading">Normal</span>
+              <svg class="btn-icon"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" data-level="0">Paragraph</button>
+              <button class="dropdown-item" data-level="1">Heading 1</button>
+              <button class="dropdown-item" data-level="2">Heading 2</button>
+              <button class="dropdown-item" data-level="3">Heading 3</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 3: Formatting -->
+        <div class="rich-btn-group">
+          <button id="ttBold" class="rich-btn-item" title="Bold">
+            <svg class="btn-icon"><use href="#icon-bold"/></svg>
+          </button>
+          <button id="ttItalic" class="rich-btn-item" title="Italic">
+            <svg class="btn-icon"><use href="#icon-italic"/></svg>
+          </button>
+          <button id="ttStrike" class="rich-btn-item" title="Strike">
+            <svg class="btn-icon"><use href="#icon-strikethrough"/></svg>
+          </button>
+          <button id="ttCode" class="rich-btn-item" title="Code">
+            <svg class="btn-icon"><use href="#icon-code"/></svg>
+          </button>
+        </div>
+
+        <!-- Group 4: Alignment -->
+        <div class="rich-btn-group">
+          <button id="ttAlignLeft" class="rich-btn-item" title="Align Left">
+            <svg class="btn-icon"><use href="#icon-align-left"/></svg>
+          </button>
+          <button id="ttAlignCenter" class="rich-btn-item" title="Align Center">
+            <svg class="btn-icon"><use href="#icon-align-center"/></svg>
+          </button>
+          <button id="ttAlignRight" class="rich-btn-item" title="Align Right">
+            <svg class="btn-icon"><use href="#icon-align-right"/></svg>
+          </button>
+        </div>
+
+        <!-- Group 5: Lists & Quote -->
+        <div class="rich-btn-group">
+          <button id="ttBullet" class="rich-btn-item" title="Bullet List">
+            <svg class="btn-icon"><use href="#icon-list"/></svg>
+          </button>
+          <button id="ttOrdered" class="rich-btn-item" title="Ordered List">
+            <svg class="btn-icon"><use href="#icon-list-ordered"/></svg>
+          </button>
+          <button id="ttQuote" class="rich-btn-item" title="Blockquote">
+            <svg class="btn-icon"><use href="#icon-quote"/></svg>
+          </button>
+        </div>
+
+        <!-- Group 6: Inserts & Color -->
+        <div class="rich-btn-group">
+          <div class="rich-btn-item color-wrapper" title="Text Color">
+            <svg class="btn-icon"><use href="#icon-color-picker"/></svg>
+            <input type="color" id="ttColor" class="color-input" value="#000000">
+          </div>
+          <button id="ttLink" class="rich-btn-item" title="Link">
+            <svg class="btn-icon"><use href="#icon-link"/></svg>
+          </button>
+          <button id="ttImage" class="rich-btn-item" title="Image">
+            <svg class="btn-icon"><use href="#icon-image"/></svg>
+          </button>
+        </div>
+
+        <!-- EDITOR MODE SWITCHER (Rich Toolbar) -->
+        <div class="tools-dropdown ml-auto">
+          <!-- Trigger -->
+            <button id="editorModeTriggerRich" class="rich-btn-item" style="border-radius: 8px; gap: 6px; min-width: 120px; justify-content: space-between;">
+    <span class="current-mode-label">Super Editor</span>
+    <svg class="btn-icon"><use href="#icon-chevron-down"/></svg>
+  </button>
+          
+          <!-- The Dropdown Menu -->
+            <div id="editorModeDropdownRich" class="tools-dropdown-content hidden">
+            
+            <!-- OPTION 1: PLAIN TEXT -->
+            <button class="tool-vertical-btn mode-option" data-mode="plain">
+              <!-- Left Icon: Text -->
+              <svg class="btn-icon"><use href="#icon-text"/></svg>
+              <span>Plain Text</span>
+              <!-- Right Icon: Checkmark -->
+              <svg class="mode-check-icon"><use href="#icon-check"/></svg>
+            </button>
+
+            <!-- OPTION 2: SUPER EDITOR -->
+            <button class="tool-vertical-btn mode-option" data-mode="rich">
+              <div style="display:flex; align-items:center; gap:10px; flex:1;">
+                <!-- Left Icon: Sparkles -->
+                <svg class="btn-icon"><use href="#icon-color-picker"/></svg>
+                <span>Super Editor</span>
+                
+                <!-- Lock Icon (Hidden via CSS if Premium) -->
+                <svg class="lock-icon"><use href="#icon-lock"/></svg>
+              </div>
+              
+              <!-- Right Icon: Checkmark -->
+              <svg class="mode-check-icon"><use href="#icon-check"/></svg>
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  <!-- Rich Editor Body -->
+  <div class="editor-left">
+    <div id="tiptapEditor" class="tiptap-content"></div>
+  </div>
+</div>
+
+</div>
+
+      <!-- RIGHT: Sidebar (FULLY INDEPENDENT, FULL HEIGHT) -->
+      <aside class="editor-right">
+        <div class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="note-info">Info</button>
+          <button class="tab-btn" data-tab="version-history">History</button>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- TAB: Note Info -->
+          <div id="note-info" class="tab-panel active">
+            <div class="info-section">
+              <h4>Note Details</h4>
+              <div class="detail-row">
+                <label>Name:</label>
+                <span id="infoFileName" class="filename-display"></span>
+              </div>
+              <div class="detail-row">
+                <label>Created:</label>
+                <span id="infoCreated">—</span>
+              </div>
+              <div class="detail-row">
+                <label>Modified:</label>
+                <span id="infoModified">—</span>
+              </div>
+            </div>
+
+<div class="info-section">
+  <h4>Encryption</h4>
+  
+  <!-- Add this placeholder -->
+  <span id="encryptionEmpty">—</span>
+
+  <!-- Guest / Offline -->
+  <div id="encryptionOffline" class="offline-message" style="display: none;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+      <line x1="1" y1="1" x2="23" y2="23"></line>
+    </svg>
+    <div class="offline-text">
+      <strong>You're offline</strong>
+      <small>Sign in to save notes with end-to-end encryption</small>
+    </div>
+  </div>
+
+  <!-- Logged in -->
+  <div id="encryptionOnline" class="encryption-badge" style="display: none;">
+    <svg class="btn-icon" style="fill:#10b981;"><use href="#icon-lock"/></svg>
+    <span>AES-GCM 256-bit (E2E)</span>
+  </div>
+</div>
+
+<div class="info-section">
+  <h4>Actions</h4>
+  
+  <!-- NEW Share Button -->
+  <button id="infoShare" class="sidebar-action-btn">
+    <svg class="btn-icon"><use href="#icon-share"/></svg>
+    Share Note
+  </button>
+
+  <!-- Existing Download Button (Updated Class) -->
+  <button id="infoDownload" class="sidebar-action-btn">
+    <svg class="btn-icon"><use href="#icon-download"/></svg>
+    Download Note
+  </button>
+</div>
+          </div>
+
+
+         <!-- Version History TAB - Updated sticky bottom -->
+<!-- Version History TAB - Updated sticky bottom -->
+        <div id="version-history" class="tab-panel">
+          <div class="info-section">
+            <h4>Version History</h4>
+            <ul id="versionList" class="version-list">
+              <!-- Filled by JS -->
+            </ul>
+          </div>
+          <!-- The footer will now be dynamically inserted here by JS -->
+        </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+<!-- Share Modal (Redesigned) -->
+<div id="shareModal" class="st-modal hidden">
+  <div class="st-card" style="height: auto; min-height: auto; max-width: 440px; overflow: visible;">
+    
+    <!-- Header -->
+    <div class="st-header" style="padding: 20px 24px 16px;">
+      <div class="st-user-summary" style="gap:12px;">
+        <!-- Share Icon Badge -->
+        <div class="st-avatar-large" style="background:#f0f9ff; color:#0ea5e9; box-shadow:none; width:40px; height:40px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+        </div>
+        <div class="st-user-details">
+          <h3>Share Securely</h3>
+          <span>End-to-End Encrypted Link</span>
+        </div>
+      </div>
+      <button id="closeShareModal" class="st-close-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="st-body" style="padding: 24px; flex: 0 0 auto;">
+      
+      <!-- STEP 1: Configuration (Visible by default) -->
+      <div id="shareStepConfig">
+        <p class="st-subtext" style="margin-bottom: 20px; line-height: 1.5;">
+          This creates a read-only snapshot of your note. The encryption key is embedded in the link and is never sent to the server.
+        </p>
+        
+        <div class="st-form-group">
+          <label class="st-label">Link Expiration</label>
+          <div style="position: relative;">
+            <select id="shareExpiration" class="st-input" style="appearance: none; cursor: pointer;">
+              <option value="1">1 Hour</option>
+              <option value="24">1 Day</option>
+              <option value="72">3 Days</option>
+              <option value="168">7 Days</option> <!-- Removed 'selected' from here -->
+              <option value="720">30 Days</option>
+              <option value="0" selected>Never</option> <!-- Added 'selected' here -->
+            </select>
+            <!-- Custom Chevron -->
+            <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color:#64748b;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="st-actions-right" style="margin-top: 24px;">
+           <button id="generateShareBtn" class="st-btn-primary" style="width: 100%; justify-content: center; display: flex; gap: 8px;">
+             Generate Link
+           </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Result (Hidden by default) -->
+      <div id="shareResult" class="hidden">
+        
+        <div class="st-form-group">
+          <label class="st-label" style="color: #16a34a;">Link Generated Successfully</label>
+          <div class="share-input-group">
+            <input type="text" id="shareLinkInput" class="st-input share-input-readonly" readonly>
+            <button id="copyShareLinkBtn" class="st-btn-primary small">Copy</button>
+          </div>
+        </div>
+
+        <div class="st-info-box" style="margin-bottom: 0;">
+          <strong>Important:</strong> If you lose this link, we cannot recover it. The note content is fixed at the time of generation.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal (New Professional Design) -->
+<div id="settingsModal" class="st-modal hidden">
+  <div class="st-card">
+    
+    <!-- 1. Header: Profile & Close -->
+    <div class="st-header">
+      <div class="st-user-summary">
+        <div id="stAvatar" class="st-avatar-large">U</div>
+        <div class="st-user-details">
+          <h3 id="stName">User Name</h3>
+          <span id="stEmail">user@example.com</span>
+        </div>
+      </div>
+      <button id="closeSettings" class="st-close-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- 2. Tabs Navigation -->
+    <div class="st-tabs">
+      <button class="st-tab-btn active" data-target="tab-general">General</button>
+      <button class="st-tab-btn" data-target="tab-security">Security</button>
+      <button class="st-tab-btn" data-target="tab-data">Account</button>
+    </div>
+
+    <!-- 3. Content Body -->
+    <div class="st-body">
+      
+      <!-- TAB: General (Plan & Stats) -->
+      <div id="tab-general" class="st-tab-content active">
+        <!-- Plan Card -->
+        <div class="st-section-card" id="stPlanCard">
+          <div class="st-row-between">
+            <div>
+              <div class="st-label">Current Plan</div>
+              <div id="stPlanName" class="st-value-large">Free Plan</div>
+            </div>
+            <div id="stPlanBadge" class="st-badge">Free</div>
+          </div>
+          <div class="st-divider"></div>
+          <div class="st-row-between">
+            <span id="stPlanExpiry" class="st-subtext">Unlock all premium features</span>
+            <button id="stUpgradeBtn" class="st-btn-primary small">Upgrade to Pro</button>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="st-grid-2">
+          <div class="st-stat-box">
+            <span class="st-stat-label">Total Notes</span>
+            <span id="stNoteCount" class="st-stat-value">0</span>
+          </div>
+          <div class="st-stat-box">
+            <span class="st-stat-label">Member Since</span>
+            <span id="stJoinedDate" class="st-stat-value">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Security (Password) -->
+<div id="tab-security" class="st-tab-content">
+    <div class="st-form-group">
+        <label class="st-label">Change Password</label>
+        <input type="password" id="currentPassword" class="st-input" placeholder="Current password" />
+        <!-- Placeholder updated from min 6 chars to min 10 chars -->
+        <input type="password" id="newPassword" class="st-input" placeholder="New password (min 10 chars)" />
+        <input type="password" id="confirmPassword" class="st-input" placeholder="Confirm new password" />
+    </div>
+    <div class="st-info-box" style="background:#fff7ed; color:#c2410c; border-color:#fed7aa;">
+        <strong>Warning:</strong> We cannot recover your password. If you forget it, your notes will be lost forever.
+    </div>
+    <div class="st-actions-right">
+        <button id="changePasswordBtn" class="st-btn-primary">Update Password</button>
+    </div>
+</div>
+
+      <!-- TAB: Data (Import/Export/Delete) -->
+      <div id="tab-data" class="st-tab-content">
+        
+        <div class="st-label" style="margin-bottom:12px">Backup</div>
+        
+        <!-- Big Clickable Cards Grid -->
+        <div class="st-action-grid">
+          <button id="exportJsonBtn" class="st-action-card-btn">
+            <svg class="btn-icon"><use href="#icon-download"/></svg>
+            <span class="st-action-text">Export Data</span>
+          </button>
+
+        </div>
+
+
+
+        <!-- Danger Zone at the bottom -->
+        <div class="st-danger-section">
+            <div class="st-label" style="color:#ef4444;">Danger Zone</div>
+            <div class="st-danger-row">
+              <div class="st-danger-info">
+                <strong>Delete Account</strong>
+                <p>This will erase all notes permanently.</p>
+              </div>
+              <button id="deleteAccountBtn" class="st-btn-danger">Delete</button>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Upgrade Feature Modal -->
+<div id="upgradeModal" class="st-modal hidden">
+  <div class="st-card" style="height: auto; max-height: 90vh; max-width: 400px; overflow: visible;">
+    
+    <!-- Header -->
+    <div class="st-header" style="border-bottom: none; padding-bottom: 0;">
+      <div class="st-user-summary"></div> <!-- Spacer -->
+      <button id="closeUpgradeModal" class="st-close-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="st-body" style="text-align: center; padding-top: 0; padding-bottom: 32px; background: #fff;">
+      
+      <!-- Crown Icon Bubble -->
+      <div style="width: 64px; height: 64px; background: #fffbeb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #d97706;">
+        <svg class="btn-icon" style="width: 32px; height: 32px;"><use href="#icon-crown"/></svg>
+      </div>
+
+      <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Custom Categories</h3>
+      
+      <p style="font-size: 14px; color: #64748b; margin-bottom: 24px; line-height: 1.5;">
+        Organizing notes into custom folders is a <strong>Pro feature</strong>.<br>
+        Upgrade to unlock unlimited categories.
+      </p>
+
+      <button id="goToPricingBtn" class="st-btn-primary" style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px;">
+        Upgrade to Pro
+      </button>
+      
+      <button id="cancelUpgradeBtn" style="margin-top: 12px; background: none; border: none; color: #64748b; font-size: 13px; font-weight: 500; cursor: pointer;">
+        Maybe later
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- RICH EDITOR SANDBOX MODAL -->
+<div id="richPreviewModal" class="st-modal hidden">
+  <!-- CHANGED: max-width increased to 880px -->
+  <div class="st-card" style="height: auto; max-width: 910px; overflow: hidden; display: flex; flex-direction: column;">
+    
+    <!-- Header -->
+    <div class="st-header" style="padding: 16px 24px; background: #f8fafc; border-bottom:none;">
+      <div class="st-user-summary" style="gap:10px;">
+        <div class="st-avatar-large" style="background:#eef2ff; color:#4f46e5; width:36px; height:36px; font-size:16px;">
+          <svg class="btn-icon" style="width:20px;height:20px;"><use href="#icon-crown"/></svg>
+        </div>
+        <div class="st-user-details">
+          <h3 style="font-size:15px;">Super Editor (Interactive Demo)</h3>
+          <span style="font-size:12px;">Experience the power of rich formatting.</span>
+        </div>
+      </div>
+      <button id="closeRichPreview" class="st-close-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- SANDBOX BODY -->
+    <div class="sandbox-editor-container">
+      
+      <!-- SANDBOX TOOLBAR (IDs prefixed with prev_) -->
+      <div class="toolbar-panel rich-panel simple-toolbar" style="border-bottom: 1px solid #e2e8f0; background: #fff; padding: 8px 12px;">
+        
+        <!-- Group 1: History -->
+        <div class="rich-btn-group">
+          <button id="prev_ttUndo" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
+          <button id="prev_ttRedo" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 3.7"/></svg></button>
+        </div>
+
+        <!-- Group 2: Headings -->
+        <div class="rich-btn-group">
+           <div class="dropdown" id="prev_headingDropdown">
+            <button class="rich-btn-item rich-dropdown-trigger dropdown-trigger">
+              <span>Heading</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" data-level="0">Paragraph</button>
+              <button class="dropdown-item" data-level="1">Heading 1</button>
+              <button class="dropdown-item" data-level="2">Heading 2</button>
+              <button class="dropdown-item" data-level="3">Heading 3</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Group 3: Formatting -->
+        <div class="rich-btn-group">
+          <button id="prev_ttBold" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg></button>
+          <button id="prev_ttItalic" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg></button>
+          <button id="prev_ttStrike" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 4H9a3 3 0 0 0-2.83 4"/><path d="M14 12a4 4 0 0 1 0 8H6"/><line x1="4" x2="20" y1="12" y2="12"/></svg></button>
+          <button id="prev_ttCode" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
+        </div>
+
+        <!-- Group 4: Alignment -->
+        <div class="rich-btn-group">
+          <button id="prev_ttAlignLeft" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 5H3"/><path d="M15 12H3"/><path d="M17 19H3"/></svg></button>
+          <button id="prev_ttAlignCenter" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 5H3"/><path d="M17 12H7"/><path d="M19 19H5"/></svg></button>
+          <button id="prev_ttAlignRight" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 5H3"/><path d="M21 12H9"/><path d="M21 19H7"/></svg></button>
+        </div>
+
+        <!-- Group 5: Lists -->
+        <div class="rich-btn-group">
+          <button id="prev_ttBullet" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5h.01"/><path d="M3 12h.01"/><path d="M3 19h.01"/><path d="M8 5h13"/><path d="M8 12h13"/><path d="M8 19h13"/></svg></button>
+          <button id="prev_ttOrdered" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 5h10"/><path d="M11 12h10"/><path d="M11 19h10"/><path d="M4 4h1v5"/><path d="M4 9h2"/><path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02"/></svg></button>
+          <button id="prev_ttQuote" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg></button>
+        </div>
+
+        <!-- Group 6: Inserts -->
+        <div class="rich-btn-group">
+          <div class="rich-btn-item color-wrapper" title="Text Color">
+  <svg class="btn-icon"><use href="#icon-color-picker"/></svg>
+  <input type="color" id="prev_ttColor" class="color-input" value="#000000">
+</div>
+          <button id="prev_ttLink" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+          <button id="prev_ttImage" class="rich-btn-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" x2="22" y1="5" y2="5"/><line x1="19" x2="19" y1="2" y2="8"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></button>
+        </div>
+
+      </div>
+
+      <!-- SANDBOX EDITOR INSTANCE -->
+      <div id="previewEditorBody"></div>
+
+      <!-- STICKY FOOTER -->
+      <div class="sandbox-footer">
+        <div class="sandbox-text">✨ You are in interactive demo mode. Content is not saved.</div>
+        <button id="upgradeFromPreviewBtn" class="st-btn-primary small">
+          Unlock Pro to Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Global App Loader Overlay -->
+<div id="appLoader" class="app-loader">
+  <div class="loader-content">
+    <div class="spinner-circle"></div>
+    <p id="loaderMessage">Initializing VeroNote...</p>
+  </div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="st-modal hidden">
+  <div class="st-card" style="max-width: 600px; height: 80vh; display: flex; flex-direction: column;">
+    
+    <!-- Header -->
+    <div class="st-header">
+      <div class="st-user-summary">
+        <div class="st-avatar-large" style="background:#e0e7ff; color:#4f46e5;">
+          <svg class="btn-icon"><use href="#icon-search"/></svg>
+        </div>
+        <div class="st-user-details">
+          <h3>Deep Search</h3>
+          <span id="searchStatusText">Search through encrypted content</span>
+        </div>
+      </div>
+      <button id="closeSearchBtn" class="st-close-btn">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- Search Input Area -->
+    <div style="padding: 20px; border-bottom: 1px solid var(--border);">
+      <div class="input-group" style="margin-bottom: 0;">
+        <input type="text" id="globalSearchInput" placeholder="Type to search..." style="font-size: 16px; padding: 12px;" autocomplete="off">
+      </div>
+      <!-- Progress Bar -->
+      <div id="searchProgressBarContainer" style="height: 4px; background: #f1f5f9; margin-top: 10px; border-radius: 2px; overflow: hidden; display: none;">
+        <div id="searchProgressBar" style="width: 0%; height: 100%; background: #4f46e5; transition: width 0.2s;"></div>
+      </div>
+    </div>
+
+    <!-- Results List (Scrollable) -->
+    <div id="searchResultsList" style="flex: 1; overflow-y: auto; padding: 10px; background: #f8fafc;">
+      <!-- Results injected here -->
+      <div class="empty-search-state" style="text-align: center; padding: 40px; color: #64748b;">
+        Start typing to decrypt and search your vault.
+      </div>
+    </div>
+
+  </div>
+</div>
+  <!-- Scripts -->
+  <!-- icons.js moved to the bottom of body to fix "null" error -->
+   <div id="mobileOverlay" class="mobile-overlay hidden"></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - VeroNote | Secure Encrypted Notes</title>
+      <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+    <style>
+        /* --- CSS VARIABLES (Theming) --- */
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --accent-green: #22c55e;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 1rem;
+            --container: 1200px;
+        }
+
+        /* --- RESET & TYPOGRAPHY --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container { max-width: var(--container); margin: 0 auto; padding: 0 1.5rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        .text-center { text-align: center; }
+        .hidden-mobile { display: none; }
+        
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .hidden-mobile { display: flex; }
+            .mobile-menu-btn { display: none; }
+        }
+
+        /* --- NAVIGATION (Replicated from pricing.html) --- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            display: flex; align-items: center;
+        }
+        .nav-inner { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* --- LOGO STYLE A (Updated) --- */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 32px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+            color: #3b82f6; /* Primary Blue */
+            fill: currentColor;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .logo-link:hover .logo-icon {
+            transform: scale(1.1) rotate(-5deg);
+            color: #2563eb; /* Darker Blue */
+        }
+
+        .logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 26px; /* Visual height match */
+            line-height: 1;
+            font-weight: 800;
+            color: #0f172a; /* Slate 900 */
+            letter-spacing: -0.04em;
+            white-space: nowrap;
+        }
+
+        .logo-text span {
+            color: #3b82f6;
+        }
+        /* ------------------------------------- */
+
+        .nav-links { gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: #3b82f6; }
+        .btn-nav { background: #3b82f6; color: white !important; padding: 0.5rem 1rem; border-radius: 99px; }
+        .btn-nav:hover { background: var(--primary-hover); }
+
+        /* --- HERO --- */
+        header { padding-top: 140px; padding-bottom: 60px; max-width: 800px; margin: 0 auto; text-align: center; }
+        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--text-main); }
+        @media(min-width: 768px) { h1 { font-size: 3.75rem; } }
+        header p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        .highlight { color: #3b82f6; }
+
+        /* --- FAQ SECTION --- */
+        .faq-section { max-width: 800px; margin: 0 auto 6rem; }
+
+        /* Custom list styling for the why-choose answer */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0 0;
+        }
+        .feature-list li {
+            padding-left: 1.8rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #22c55e;
+            font-weight: 700;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .feature-list li strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .faq-section h2 { 
+            font-size: 1.5rem; font-weight: 700; 
+            color: #3b82f6; 
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        details { 
+            background: white; border: 1px solid var(--border); 
+            border-radius: 0.75rem; margin-bottom: 1rem; 
+            overflow: hidden; transition: all 0.3s;
+        }
+        details:hover { border-color: #cbd5e1; }
+        summary { 
+            padding: 1.25rem; font-weight: 500; cursor: pointer; 
+            list-style: none; display: flex; justify-content: space-between; align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "+"; font-size: 1.5rem; color: var(--text-muted); font-weight: 300; }
+        details[open] summary::after { content: "-"; }
+        .faq-content { 
+            padding: 0 1.25rem 1.25rem; color: var(--text-muted); line-height: 1.6; 
+            border-top: 1px solid #f1f5f9; padding-top: 1rem; 
+        }
+        
+        /* Smooth Animation */
+        details[open] .faq-content { animation: slideDown 0.2s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- FOOTER --- */
+        footer { border-top: 1px solid var(--border); background: white; padding: 4rem 0 2rem; text-align: center; }
+        .copyright { color: #94a3b8; font-size: 0.875rem; }
+        
+        /* --- MOBILE MENU STYLES --- */
+        @media (max-width: 767px) {
+            .nav-links.mobile-open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 2rem;
+                border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow-lg);
+                gap: 1.5rem;
+                z-index: 99;
+            }
+            
+            .nav-links.mobile-open.hidden-mobile {
+                display: flex; 
+            }
+        }
+    </style>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="index.html" class="logo-link">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M19.003 7.503L14.505 3h-8.5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-11.5zm-5-2l2.5 2.5h-2.5v-2.5z" fill="currentColor"/>
+                    <path d="M8 11h8v2H8zm0 4h5v2H8z" fill="white"/>
+                </svg>
+                <div class="logo-text">Vero<span>Note</span></div>
+            </a>
+            
+            <div class="nav-links hidden-mobile items-center">
+                <a href="index.html">Home</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="contact.html">Contact</a>
+                <a href="#" class="active">FAQ</a>
+                <a href="index.html" class="btn-nav">Back to Notes</a>
+            </div>
+
+            <div class="mobile-menu-btn">
+                <svg width="24" height="24" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="container">
+        <header>
+            <h1>Commonly Asked <span class="highlight">Questions</span></h1>
+            <p>Find quick answers about security, features, and your VeroNote account.</p>
+        </header>
+    </div>
+
+    <!-- FAQ section with all questions as <details> -->
+    <section class="container faq-section">
+        
+
+
+        <!-- SECTION: GENERAL -->
+        <h2 id="general">General</h2>
+
+        <details>
+            <summary>What is VeroNote?</summary>
+            <div class="faq-content">VeroNote is a privacy-first, end-to-end encrypted note-taking platform. It uses "Zero-Knowledge" architecture, which ensures that only the account holder has the keys to decrypt and read the stored information.</div>
+        </details>
+                <!-- Why choose VeroNote - now as a normal question -->
+        <details>
+            <summary>Why choose VeroNote over others?</summary>
+            <div class="faq-content">
+                <p style="margin-bottom: 1rem;">Most "secure" note apps only encrypt the text inside the note. At VeroNote, we believe privacy should be absolute.</p>
+                <ul class="feature-list">
+                    <li><strong>Encrypted Metadata:</strong> Unlike competitors, we encrypt your Note Titles and Folder names. Even we don't know what you are writing about.</li>
+                    <li><strong>No-Data-Collection:</strong> We don't track your location, your device ID, or your usage habits.</li>
+                    <li><strong>Zero-Knowledge:</strong> Your password never touches our server. Encryption happens entirely in your browser.</li>
+                    <li><strong>Instant Portability:</strong> Export your entire vault in one click. You own your data, not us.</li>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>Is it really free?</summary>
+            <div class="faq-content">Yes. Our Free plan includes unlimited notes and core E2EE security. We offer a Pro plan for users who need extended version history and advanced organizational tools.</div>
+        </details>
+
+        <details>
+            <summary>Do you have a mobile app?</summary>
+            <div class="faq-content">VeroNote is currently a Progressive Web App (PWA) optimized for mobile browsers. You can "Add to Home Screen" on iOS and Android for a native-like experience. Dedicated app store versions are in our future roadmap.</div>
+        </details>
+
+        <!-- SECTION: SECURITY & PRIVACY -->
+        <h2 id="security">Security & Privacy</h2>
+        <details>
+            <summary>How exactly is my data protected?</summary>
+            <div class="faq-content">We use the industry-standard <strong>AES-GCM 256-bit encryption</strong>. When you log in, your password creates a "Master Key" locally in your browser. This key is used to unlock your notes. Because this happens on your device, the unencrypted data is never visible to the network or our servers.</div>
+        </details>
+        
+        <details>
+            <summary>What happens if I forget my password?</summary>
+            <div class="faq-content">Because we don't store your password (or any "backdoor" keys), <strong>we cannot reset your password</strong>. If lost, your notes remain encrypted and mathematically impossible for anyone to recover. We strongly advise using a reliable password manager.</div>
+        </details>
+        
+        <details>
+            <summary>Can I sync across devices?</summary>
+            <div class="faq-content">Yes. Your encrypted "blobs" are synced via our secure cloud. When you log in on a new device, your browser uses your password to locally decrypt the data. Sync is real-time and automatic.</div>
+        </details>
+
+        <!-- SECTION: FEATURES & DATA -->
+        <h2 id="usage">Features & Data</h2>
+        <details>
+            <summary>How does Version History work?</summary>
+            <div class="faq-content">VeroNote automatically saves a "snapshot" of your note whenever you make significant changes. Free users can restore versions from the last 7 days, while Pro users have access to an unlimited history.</div>
+        </details>
+        
+        <details>
+            <summary>How do I backup or export my notes?</summary>
+            <div class="faq-content">Go to <strong>Settings > Data</strong> to export your entire library. Your data is exported as an encrypted JSON file, which you can keep as a personal backup or import back into VeroNote at any time.</div>
+        </details>
+
+        <details>
+            <summary>Can I use VeroNote offline?</summary>
+            <div class="faq-content">Yes. Once you have logged in, VeroNote caches your vault locally. You can continue to write and edit notes without an internet connection. Your changes will automatically sync to the cloud once you are back online.</div>
+        </details>
+        
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 1rem;">
+                VeroNote
+            </div>
+            <p class="copyright">© 2026 VeroNote. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (menuBtn && navLinks) {
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile-open');
+                navLinks.classList.toggle('hidden-mobile');
+            });
+        }
+    </script>
+</body>
+</html>

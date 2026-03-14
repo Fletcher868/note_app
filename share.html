@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Secure Shared Note | VeroNote</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Remix Icons (for consistency) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 1rem;
+            --container: 1200px;
+            --border-light: #e5e7eb;
+            --border-focus: #93c5fd;
+            --text-placeholder: #9ca3af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation (copied from contact.html) */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            display: flex; align-items: center;
+        }
+        .nav-inner { 
+            width: 100%; 
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        /* LOGO STYLE A */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 32px;
+            text-decoration: none;
+            padding-left: 8px;
+        }
+
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+            color: #3b82f6;
+            fill: currentColor;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .logo-link:hover .logo-icon {
+            transform: scale(1.1) rotate(-5deg);
+            color: #2563eb;
+        }
+
+        .logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 26px;
+            line-height: 1;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.04em;
+            white-space: nowrap;
+        }
+
+        .logo-text span {
+            color: #3b82f6;
+        }
+
+        .hidden-mobile { display: none; }
+        .items-center { align-items: center; }
+        
+        @media (min-width: 768px) {
+            .hidden-mobile { display: flex; }
+        }
+
+        .nav-links { gap: 2rem; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-muted); 
+            font-weight: 500; 
+            font-size: 0.95rem; 
+            transition: color 0.2s; 
+        }
+        .nav-links a:hover, .nav-links a.active { color: #3b82f6; }
+        .btn-nav { 
+            background: #3b82f6; 
+            color: white !important; 
+            padding: 0.5rem 1rem; 
+            border-radius: 99px; 
+        }
+        .btn-nav:hover { background: var(--primary-hover); }
+
+        /* Main Content */
+        .container {
+            width: 100%;
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .btn-cta span {
+            color: white !important;
+        }
+
+        /* Improved New Note Button */
+        .btn-cta {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-cta:hover::before {
+            left: 100%;
+        }
+
+        .btn-cta i {
+            font-size: 16px;
+        }
+
+        /* Main Container */
+        .content-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 120px auto 40px;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- New header styles (from export.js) --- */
+        h1 {
+            color: #8b5cf6;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+        
+
+        /* ------------------------------------------- */
+
+        /* Viewer Card */
+        .viewer-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .viewer-card:hover {
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+            border-color: var(--border-focus);
+        }
+
+        /* Editor Area – same white background as the card */
+        .editor-area {
+            background: #f1f5f9;
+            padding: 0;
+            position: relative;
+            min-height: 300px;
+        }
+
+        /* Text area wrapper – no extra background, matches editor-area */
+        .text-area-wrapper {
+            padding: 0;
+            position: relative;   /* Critical for absolute positioning of loading/placeholder */
+            min-height: 300px;    /* Ensures the area has height even when empty */
+            background: transparent;
+        }
+
+        /* Shared style for both plain and rich content – matches export's .note-content */
+        .note-content,
+        .note-content .ProseMirror {
+            white-space: pre-wrap;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 20px 24px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #1e293b;
+            margin: 0;
+            outline: none;
+        }
+
+        /* For rich content, we want the default font but keep the background/padding */
+        .note-content.rich-text,
+        .note-content.rich-text .ProseMirror {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* Plain text inside contentBox gets the monospace */
+        #content.note-content.plain-text {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Placeholder when content is loading */
+        .text-placeholder {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: var(--text-placeholder);
+            font-size: 14px;
+            pointer-events: none;
+            font-style: italic;
+            z-index: 5; /* Below loading overlay when active */
+        }
+        #content.note-content {
+            position: relative;
+            z-index: 1;
+            display: none; /* Will be set to block by JS when ready */
+        }
+        #content.note-content[style*="display: block"] ~ .text-placeholder {
+            display: none;
+        }
+
+        /* Loading State */
+        .loading-state {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 10;
+        }
+        .spinner {
+            width: 32px; 
+            height: 32px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 
+            to { transform: rotate(360deg); } 
+        }
+        
+        .loading-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Error State */
+        .error-state { 
+            display: none; 
+            text-align: center; 
+            padding: 60px 40px; 
+            color: #ef4444; 
+            background: #fef2f2;
+            border-radius: 12px;
+            margin: 20px;
+            border: 1px solid #fecaca;
+        }
+
+        .error-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #991b1b;
+        }
+
+        .error-message {
+            font-size: 14px;
+            color: #b91c1c;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .card-footer {
+            padding: 24px 32px;
+            background: #fcfcfc;
+            border-top: 1px solid var(--border);
+            display: none; 
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .action-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text-main);
+        }
+
+        .btn-action:hover {
+            border-color: #93c5fd; 
+            background: #eff6ff; 
+            color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-action i { 
+            font-size: 16px; 
+            color: var(--text-muted); 
+            transition: color 0.2s; 
+        }
+        .btn-action:hover i { color: #3b82f6; }
+
+        .btn-action.primary {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        .btn-action.primary i { color: #3b82f6; }
+        .btn-action.primary:hover {
+            border-color: #60a5fa;
+            background: #dbeafe;
+        }
+
+        .btn-action.primary.copied {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #047857;
+        }
+        .btn-action.primary.copied i { color: #10b981; }
+
+        .meta-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            background: transparent;
+            padding-top: 8px;
+            border-top: 1px dashed #e5e7eb;
+            margin-top: 8px;
+            padding-top: 16px;
+        }
+        .meta-container i { font-size: 14px; color: #94a3b8; }
+
+        /* Footer Note */
+        .footer-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 40px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 0 16px;
+                margin: 100px auto 24px;
+            }
+            
+            .note-content,
+            .note-content .ProseMirror {
+                padding: 16px;
+            }
+            
+            .action-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hidden-mobile {
+                display: none !important;
+            }
+        }
+        /* Info box styles (copied from export.js) */
+.info-box {
+    background: #f0f9ff;
+    border-left: 4px solid #3b82f6;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 0; /* Remove default margin for side-by-side layout */
+}
+
+/* Container to place boxes side by side */
+.info-row {
+    display: flex;
+    margin: 20px 0;
+}
+
+/* Ensure the second box uses the warning style? (Optional – if you want the right box to be warning style, replace class) */
+/* For consistency, both use info-box. If you prefer the second one to be warning, add .warning-box as below: */
+.warning-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Navigation (copied from contact.html) -->
+    <nav>
+        <div class="nav-inner">
+            <!-- LOGO -->
+            <a href="/" class="logo-link">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M19.003 7.503L14.505 3h-8.5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-11.5zm-5-2l2.5 2.5h-2.5v-2.5z" fill="currentColor"/>
+                    <path d="M8 11h8v2H8zm0 4h5v2H8z" fill="white"/>
+                </svg>
+                <div class="logo-text">Vero<span>Note</span></div>
+            </a>
+            
+            <!-- Navigation Links -->
+            <div class="nav-links hidden-mobile items-center">
+                <a href="index.html">Home</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="contact.html">Contact</a>
+                <a href="faq.html">FAQ</a>
+                <!-- Improved New Note Button in Nav -->
+                <a href="/" class="btn-cta">
+                    <i class="ri-add-line"></i>
+                    <span>New Note</span>
+                </a>
+            </div>
+
+            <!-- Mobile menu button (hidden on desktop) -->
+            <div class="mobile-menu-btn" style="display: none;">
+                <svg width="24" height="24" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="content-container">
+    
+    <!-- Wrap these two in a new ID: noteMetadata -->
+    <div id="noteMetadata" style="display: none;">
+        <div class="info-row">
+            <div class="info-box" style="flex: 1;">
+                <strong>📅 Created</strong>
+                <p id="createdDate">Loading...</p>
+            </div>
+            <div class="info-box" style="flex: 1; margin-left: 15px;">
+                <strong>🔐 Encryption</strong>
+                <p>AES-256</p>
+            </div>
+        </div>
+
+        <h1 id="noteTitle" class="info-box" style="margin: 0 0 24px 0; font-size: 1.75rem; font-weight: 700; text-align: center;"></h1>
+    </div>
+
+    <!-- Viewer Card -->
+    <main class="viewer-card">
+            
+            <!-- Editor Area (white background, matches card) -->
+            <div class="editor-area">
+                <!-- Text Area Wrapper (transparent, so same as editor-area) -->
+                <div class="text-area-wrapper">
+                    <!-- Loading State -->
+                    <div id="loading" class="loading-state">
+                        <div class="spinner"></div>
+                        <p class="loading-text">Decrypting secure content...</p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div id="error" class="error-state">
+                        <h3 id="errorTitle" class="error-title">Access Denied</h3>
+                        <p id="errorMsg" class="error-message">Unable to decrypt this note.</p>
+                        <a href="/" class="btn-action primary" style="display: inline-flex; width: auto; padding: 10px 20px;">
+                            <i class="ri-home-line"></i>
+                            Return Home
+                        </a>
+                    </div>
+
+                    <!-- Content Display -->
+                    <div class="text-placeholder" id="placeholder">Content will appear here once decrypted...</div>
+                    <div id="content"></div>
+                </div>
+            </div>
+
+            <!-- Footer with Actions -->
+            <div id="footer" class="card-footer">
+                <div class="action-bar">
+                    <button id="copyBtn" class="btn-action primary">
+                        <i class="ri-file-copy-line"></i>
+                        Copy Text
+                    </button>
+
+                    <button id="downloadBtn" class="btn-action">
+                        <i class="ri-download-line"></i>
+                        Download
+                    </button>
+
+                    <button id="rawBtn" class="btn-action">
+                        <i class="ri-code-s-slash-line"></i>
+                        View Raw
+                    </button>
+                    <!-- Inside <div class="action-bar"> ... -->
+<button id="reportBtn" class="btn-action danger" style="border-color: #fecaca; color: #dc2626; background: #fef2f2;">
+    <i class="ri-flag-line"></i>
+    Report Abuse
+</button>
+                </div>
+
+                <div class="meta-container">
+                    <i class="ri-time-line"></i>
+                    <span id="meta">Checking expiration...</span>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer Note -->
+        <div class="footer-note">
+            <i class="ri-information-line" style="margin-right: 6px;"></i>
+            This note was shared securely with end-to-end encryption. The content was encrypted on the sender's device and can only be decrypted with the key in the URL.
+        </div>
+
+    </div>
+<!-- Report Modal -->
+<div id="reportModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin-bottom: 12px; color: #b91c1c; display: flex; align-items: center; gap: 8px;">
+            <i class="ri-alarm-warning-line"></i> Report Note
+        </h3>
+        <p style="font-size: 14px; color: #64748b; margin-bottom: 16px;">
+            Reporting this note will send its content and decryption key to the administrator for review.
+        </p>
+        
+        <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Reason</label>
+        <select id="reportReason" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 12px;">
+            <option value="Spam">Spam</option>
+            <option value="Illegal Content">Illegal Content</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Comments (Optional)</label>
+        <textarea id="reportComments" rows="3" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px; font-family: inherit;"></textarea>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="cancelReport" style="padding: 8px 16px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer;">Cancel</button>
+            <button id="submitReport" style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Submit Report</button>
+        </div>
+    </div>
+</div>
+    <!-- JavaScript Logic -->
+<script type="module">
+    // 1. Local Files
+    import { PB_URL } from './config.js'; 
+    import { importKeyFromUrl, decryptBlob, b64ToArray } from './crypto.js';
+    import './icons.js'; // Ensures the logo and icons appear on the share page
+
+    // 2. NPM Packages (Offline Bundled)
+    import PocketBase from 'pocketbase';
+    import { Editor } from '@tiptap/core';
+    import StarterKit from '@tiptap/starter-kit';
+    import { TextStyle } from '@tiptap/extension-text-style';
+    import { Color } from '@tiptap/extension-color';
+    import { Link } from '@tiptap/extension-link';
+    import { Image } from '@tiptap/extension-image';
+    import { TextAlign } from '@tiptap/extension-text-align';
+
+    // 3. Initialize
+    const pb = new PocketBase(PB_URL);
+
+        // UI Elements
+        const errorBox = document.getElementById('error');
+        const errorTitle = document.getElementById('errorTitle');
+        const errorMsg = document.getElementById('errorMsg');
+        
+        const contentBox = document.getElementById('content');
+        const loadingBox = document.getElementById('loading');
+        const metaBox = document.getElementById('meta');
+        const footer = document.getElementById('footer');
+        const placeholder = document.getElementById('placeholder');
+        
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const rawBtn = document.getElementById('rawBtn');
+
+        // New elements for stats and title
+        const statsContainer = document.getElementById('statsContainer');
+        const createdDateSpan = document.getElementById('createdDate');
+        const titleEl = document.getElementById('noteTitle'); // NEW
+        let noteOwnerId = null;
+        let decryptedContent = "";
+        let tiptapViewer = null;
+        const noteMetadata = document.getElementById('noteMetadata');
+        function showError(title, message) {
+    loadingBox.style.display = 'none';
+    contentBox.style.display = 'none';
+    placeholder.style.display = 'none';
+    footer.style.display = 'none';
+    
+    // NEW: Hide metadata if note is not found
+    if (noteMetadata) noteMetadata.style.display = 'none'; 
+    
+    errorTitle.textContent = title;
+    errorMsg.textContent = message;
+    errorBox.style.display = 'block';
+}
+
+        function showSuccess(content, title) {
+    loadingBox.style.display = 'none';
+    placeholder.style.display = 'none';
+    errorBox.style.display = 'none';
+    
+    footer.style.display = 'flex';
+    contentBox.style.display = 'block';
+    
+    // NEW: Show metadata only on success
+    if (noteMetadata) noteMetadata.style.display = 'block';
+
+    // Set Title
+    if (titleEl) {
+        titleEl.textContent = title || "Shared Note";
+        titleEl.style.display = title ? 'block' : 'none'; // Hide title box if title is empty
+    }
+
+    contentBox.classList.add('note-content');
+
+            try {
+                const json = JSON.parse(content);
+                if (json && json.type === 'doc') {
+                    // Rich Text: add class for non-monospace font
+                    contentBox.classList.add('rich-text');
+                    
+                    // Initialize Rich Text Viewer
+                    tiptapViewer = new Editor({
+                        element: contentBox,
+                        extensions: [
+                            StarterKit,
+                            TextStyle,
+                            Color,
+                            Link.configure({ openOnClick: true }),
+                            Image,
+                            TextAlign.configure({ types: ['heading', 'paragraph'] }),
+                        ],
+                        content: json,
+                        editable: false,
+                    });
+                    return;
+                }
+            } catch (e) {
+                // Not JSON or parsing failed, fallback to plain text
+            }
+
+            // Plain Text: add class for monospace
+            contentBox.classList.add('plain-text');
+            contentBox.textContent = content;
+            contentBox.style.whiteSpace = 'pre-wrap';
+        }
+// --- Report System Logic ---
+const reportBtn = document.getElementById('reportBtn');
+const reportModal = document.getElementById('reportModal');
+const cancelReport = document.getElementById('cancelReport');
+const submitReport = document.getElementById('submitReport');
+
+// Open Modal
+if(reportBtn) {
+    reportBtn.addEventListener('click', () => {
+        reportModal.style.display = 'flex';
+    });
+}
+
+// Close Modal
+if(cancelReport) {
+    cancelReport.addEventListener('click', () => {
+        reportModal.style.display = 'none';
+    });
+}
+
+// Close on background click
+window.addEventListener('click', (e) => {
+    if (e.target === reportModal) {
+        reportModal.style.display = 'none';
+    }
+});
+
+// Submit Logic
+if(submitReport) {
+    submitReport.addEventListener('click', async () => {
+        const originalText = submitReport.innerText;
+        submitReport.innerText = "Sending...";
+        submitReport.disabled = true;
+
+        try {
+            // 1. Get current URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const noteId = params.get('id');
+            
+            // 2. Capture the FULL URL (including #key)
+            const fullEvidenceUrl = window.location.href;
+
+            // 3. Send to PocketBase
+            await pb.collection('reports').create({
+    shared_note: noteId,
+    reported_user: noteOwnerId, // <--- ADD THIS LINE
+    reason: document.getElementById('reportReason').value,
+    comments: document.getElementById('reportComments').value,
+    full_url: fullEvidenceUrl
+});
+
+            // 4. Success UI
+            alert("Report submitted. The administrator will review this note shortly.");
+            reportModal.style.display = 'none';
+
+        } catch (err) {
+            console.error("Report failed:", err);
+            alert("Failed to submit report. Please try again.");
+        } finally {
+            submitReport.innerText = originalText;
+            submitReport.disabled = false;
+        }
+    });
+}
+async function loadSharedNote() {
+    const timeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 8000)
+    );
+
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const hash = window.location.hash.substring(1);
+        const keyStr = new URLSearchParams(hash).get('key');
+
+        if (!id || !keyStr) throw new Error("Invalid link parameters");
+
+        // 1. Fetch record from PocketBase
+        const record = await Promise.race([
+            pb.collection('shared_notes').getOne(id),
+            timeout
+        ]);
+
+        // Store owner ID for the report system
+        noteOwnerId = record.user;
+
+        // 2. Prepare the Metadata (Date) BEFORE showing the UI
+        if (record.created) {
+            const created = new Date(record.created).toLocaleString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+            createdDateSpan.textContent = created;
+        } else {
+            createdDateSpan.textContent = 'Unknown';
+        }
+
+        // 3. Import Key and Decrypt
+        const key = await importKeyFromUrl(keyStr);
+        const decryptedRaw = await decryptBlob({
+            iv: b64ToArray(record.iv),
+            authTag: b64ToArray(record.authTag),
+            ciphertext: b64ToArray(record.encryptedBlob)
+        }, key);
+
+        // 4. Handle Payload Unwrapping (Format: { title, content })
+        let finalContent = decryptedRaw;
+        let finalTitle = "";
+
+        try {
+            const payload = JSON.parse(decryptedRaw);
+            // Check if it's our wrapped format or a TipTap doc
+            if (payload && typeof payload === 'object' && 'title' in payload && 'content' in payload) {
+                finalTitle = payload.title;
+                finalContent = payload.content;
+            }
+        } catch (e) {
+            // Not JSON (Old plain text format), use raw decrypted string
+        }
+
+        // Save decrypted content for download/copy actions
+        decryptedContent = finalContent;
+
+        // 5. Trigger Success UI (This reveals the title and metadata boxes)
+        showSuccess(finalContent, finalTitle);
+
+        // 6. Handle Expiration Display
+        if (record.expires) {
+            const exp = new Date(record.expires);
+            const now = new Date();
+            if (now > exp) throw new Error("Expired");
+            
+            const dateStr = exp.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            const timeStr = exp.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            metaBox.textContent = `Expires: ${dateStr} at ${timeStr}`;
+        } else {
+            metaBox.textContent = "Does not expire";
+        }
+
+    } catch (err) {
+        console.error("Load failed:", err);
+        
+        // Handle specific error cases
+        if (err.message === "Timeout") {
+            showError("Connection Timeout", "The server took too long to respond.");
+        } else if (err.status === 404) {
+            showError("Note Not Found", "This note does not exist or has been deleted.");
+        } else if (err.message === "Expired") {
+            showError("Link Expired", "This shared link has expired.");
+        } else {
+            showError("Decryption Failed", "Invalid key or corrupted data.");
+        }
+    }
+}
+        // --- Action Handlers ---
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                // If Rich Text, we might want the plain text version
+                const textToCopy = tiptapViewer ? tiptapViewer.getText() : decryptedContent;
+                await navigator.clipboard.writeText(textToCopy);
+                
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = `<i class="ri-check-line"></i><span>Copied!</span>`;
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = originalHtml;
+                }, 2000);
+            } catch (err) {
+                console.error("Copy failed", err);
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (!decryptedContent) return;
+            const textToDownload = tiptapViewer ? tiptapViewer.getText() : decryptedContent;
+            const blob = new Blob([textToDownload], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date().toISOString().slice(0, 10);
+            a.href = url;
+            a.download = `Veronote-shared-${date}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        rawBtn.addEventListener('click', () => {
+            if (!decryptedContent) return;
+            const blob = new Blob([decryptedContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        });
+
+        loadSharedNote();
+    </script>
+</body>
+</html>

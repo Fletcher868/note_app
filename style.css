@@ -1,0 +1,3171 @@
+/* ================================================
+   CSS VARIABLES & RESET
+   ================================================ */
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --border: #e2e8f0;
+  --accent1: #6366f1;
+  --accent2: #06b6d4;
+  --muted: #64748b;
+  --danger: #ef4444;
+  --toolbar-bg: #f9fafb;
+  --toolbar-hover: rgba(99, 102, 241, 0.08);
+  --toolbar-active: rgba(99, 102, 241, 0.15);
+  font-family: 'Cantarell', system-ui, -apple-system, sans-serif;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: #1e293b;
+  overflow: hidden;
+}
+
+/* ================================================
+   SELF-HOSTED FONTS: Cantarell (Latin)
+   ================================================ */
+
+/* Variable Font - contains all weights (Thin to Extra Bold) */
+@font-face {
+  font-display: swap;
+  font-family: 'Cantarell';
+  font-style: normal;
+  font-weight: 100 800;  /* This range covers all weights */
+  src: url('./fonts/Cantarell-VF.woff2') format('woff2-variations');
+}
+
+/* Fallback for older browsers */
+@supports not (font-variation-settings: normal) {
+  @font-face {
+    font-family: 'Cantarell';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/Cantarell-VF.woff2') format('woff2');
+  }
+}
+
+/* Liberation Sans Bold (700) */
+@font-face {
+  font-display: swap;
+  font-family: 'Liberation Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/liberationsans-bold-webfont.woff2') format('woff2');
+}
+/* ================================================
+   MAIN APP LAYOUT
+   ================================================ */
+.app { display: flex; height: 100vh; width: 100vw; }
+
+/* ================================================
+   LEFT SIDEBAR
+   ================================================ */
+.sidebar {
+  width: 235px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding-left: 6px;
+  padding-bottom: 6px;
+  padding-top: 8px;
+}
+
+/* =========================================
+   LOGO STYLE A: FLUSH STICKY NOTE
+   ========================================= */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  height: 32px;
+  width: 32px;
+  color: #3b82f6; /* Primary Blue */
+  fill: currentColor;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.logo-link:hover .logo-icon {
+  transform: scale(1.1) rotate(-5deg);
+  color: #2563eb; /* Darker Blue */
+}
+
+.logo-text {
+  font-family: 'Liberation Sans', sans-serif;
+  margin-top: 2px;
+  font-size: 26px; /* Visual height match */
+  line-height: 1;
+  font-weight: 800;
+  color: #0f172a; /* Slate 900 */
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.logo-text span {
+  color: #3b82f6;
+}
+
+.new-btn {
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 8px; border: 0;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  color: white; cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.new-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+
+/* Sidebar title - Adjust if needed */
+.sb-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #64748b;
+  margin-left: 10px;
+  display: none; /* Hide if you don't need it */
+}
+
+/* If you want to keep the title visible, adjust layout */
+/* Sidebar Header with Elegant Separator */
+.sb-head {
+  display: flex;
+  align-items: center;
+  
+  /* Vertical Spacing */
+  padding-top: 6px;
+  padding-bottom: 18px; /* Space between logo and the line */
+  
+  /* The Separator Line */
+  border-bottom: 1px solid #f1f5f9; /* Very subtle slate color */
+  
+  /* Horizontal Adjustment */
+  margin-right: 8px;    /* Keeps the line from touching the right scrollbar edge */
+}
+
+/* Files List */
+.files { flex: 1; overflow-y: auto;}
+.file-item {
+  padding: 12px 6px 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(226, 232, 240, 0.6);
+  min-height: 52px;
+  cursor: pointer;
+}
+.file-item.active {
+  background: rgba(99, 102, 241, .1);
+  border-color: var(--accent1);
+}
+.file-item {
+  background: transparent;
+}
+
+.file-item:hover {
+  background: #f1f5f9;
+}
+
+.file-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.file-name {
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14.5px;
+  line-height: 1.3;
+  color: #1e293b;
+}
+
+.file-preview {
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.file-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: var(--accent1);
+  transition: width .2s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+
+
+
+
+.file-item.active .file-preview {
+  color: #374151;
+  font-weight: 400;
+  opacity: 1;
+}
+
+.file-item.active::before { width: 3px; }
+
+/* File Context Menu */
+.more-btn {
+  background: none; 
+  border: none;
+  color: var(--muted); 
+  cursor: pointer;
+  font-size: 18px; 
+  font-weight: bold;
+  padding: 0 6px; 
+  opacity: .7;
+  transition: opacity .15s;
+  align-self: center;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.more-btn:hover { opacity: 1; }
+
+.file-context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 3px;
+  min-width: 150px;
+  animation: menuFade 0.2s ease-out;
+}
+.file-context-menu button {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 3px 0;
+}
+.file-context-menu button:hover { background: #f1f5f9; }
+.file-context-menu .ctx-rename { color: #475569; }
+.file-context-menu .ctx-info { color: #3b82f6; }
+.file-context-menu .ctx-versions { color: #8b5cf6; }
+.file-context-menu .ctx-download { color: #f59e0b; }
+.file-context-menu .ctx-share { color: #06b6d4; } 
+.file-context-menu .ctx-delete {
+  color: white;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  font-weight: 600;
+  margin-top: 9px;
+  margin-bottom: 3px;
+}
+.file-context-menu .ctx-delete:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+/* --- Ultra-Thin Left-Side Scrollbar --- */
+#filesList {
+  
+  /* 2. Firefox Logic */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  
+  /* Ensure scrolling is active */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 3. Reset text direction for the actual notes so they look normal */
+#filesList > * {
+  direction: ltr; 
+}
+
+/* 4. Chrome/Edge/Safari Logic (2px width) */
+#filesList::-webkit-scrollbar {
+  width: 2px;  /* Extremely thin */
+}
+
+#filesList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#filesList::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+/* =========================================
+   MINIMAL PROFILE BUTTON WITH BACKGROUND & DOTS
+   ========================================= */
+
+.sb-profile { 
+  position: relative;
+  margin-top: auto;
+  padding: 0 2px 8px 2px;
+}
+
+.profile-btn {
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  width: 100%; 
+  padding: 10px 4px;
+  
+  /* Solid Background Color */
+  background: #f0f5ff; /* Light blue background */
+  border: 1px solid #dbeafe; /* Light blue border */
+  border-radius: 10px; 
+  
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  min-width: 0;
+}
+
+/* Hover State */
+.profile-btn:hover { 
+  background: #e0f2fe; /* Light blue when hover */
+  border-color: #7dd3fc; /* Slightly darker blue border */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Avatar */
+.profile-btn .avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb); /* Blue gradient */
+  color: white;
+  border-radius: 8px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Info Column */
+.profile-btn .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 36px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Name */
+.profile-btn .name {
+  font-size: 13px; 
+  font-weight: 600;
+  color: #1e293b; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status */
+.profile-btn .status {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status Colors */
+.status.premium { color: #8b5cf6; font-weight: 700; } 
+.status.free    { color: #475569; font-weight: 500; }
+.status.guest   { color: #64748b; font-weight: 400; }
+
+/* Three Dots */
+.profile-dots {
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.7;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Dots on Hover */
+.profile-btn:hover .profile-dots {
+  color: #3b82f6;
+  opacity: 1;
+}
+/* =========================================
+   MODERN FLOATING DROPDOWN (Black Text)
+   ========================================= */
+
+/* 1. The Container */
+.profile-dropdown {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+  border-radius: 16px;
+  /* Deep Shadow */
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 100;
+  
+  transform-origin: bottom left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.profile-dropdown.hidden {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* 2. Content Sections */
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dropdown-content.hidden { display: none; }
+
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Section Labels (Access, Preferences) - BLACK */
+.menu-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1b1f29; /* Black */
+  text-transform: uppercase;
+  padding: 8px 12px 4px;
+  letter-spacing: 0.5px;
+}
+
+.menu-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 4px 0;
+}
+
+/* 3. Dropdown Items (Settings, Export, etc) - BLACK */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  
+  /* FORCE BLACK TEXT */
+  color: #000000; 
+  font-size: 14px;
+  font-weight: 500;
+  
+  transition: background 0.15s ease;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6; /* Light gray hover background */
+  color: #000000;      /* Keep text black on hover */
+}
+
+/* Icons styling */
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #000000; /* Icons Black */
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover .icon-box {
+  background: #e2e8f0;
+}
+
+.dropdown-item .btn-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+
+
+
+/* Danger (Logout) */
+.danger-item:hover {
+  background: #fee2e2;
+  color: #ef4444; /* Red text on hover only for logout */
+}
+.danger-item:hover .icon-box {
+  background: #ef4444;
+  color: white;
+}
+
+/* Arrow Right */
+.arrow-right {
+  margin-left: auto;
+  color: #000000; /* Black */
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 4. Submenu */
+.dropdown-option { position: relative; }
+
+.submenu {
+  position: absolute;
+  left: 100%;
+  bottom: -4px;
+  margin-left: 8px;
+  width: 180px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  padding: 6px;
+  
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-8px);
+  transition: all 0.2s ease;
+  z-index: 101;
+}
+
+.dropdown-option:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.submenu .dropdown-item {
+  font-size: 13px;
+  padding: 8px 10px;
+  color: #000000; /* Black */
+}
+
+/* 5. Forms (Login/Signup) */
+.form-content {
+  padding: 8px 4px;
+}
+
+.form-header {
+  padding: 0 8px 12px 8px;
+  text-align: center;
+}
+.form-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000; /* Black */
+}
+.form-header p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #000000; /* Black */
+  opacity: 0.7;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #000000; /* Black */
+  background: #f8fafc;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input-group input:focus {
+  background: white;
+  border-color: #6366f1; /* Focus accent color */
+}
+
+.form-actions-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background: #6366f1; /* Black Button */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: #4f46e5; /* Slightly darker indigo */
+}
+
+.btn-menu {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  color: #000000; /* Black */
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-menu:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+/* Offline Message Styles */
+.offline-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 13.5px;
+}
+.offline-message svg {
+  flex-shrink: 0;
+  stroke: #d97706;
+  width: 20px;
+  height: 20px;
+}
+.offline-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+.offline-text strong {
+  font-weight: 600;
+  font-size: 14px;
+}
+.offline-text small {
+  font-size: 15px;
+  opacity: 0.92;
+  margin-top: 1px;
+}
+
+/* Ensure the offline message is only shown when needed */
+.menuLoggedIn .offline-message,
+.loginForm .offline-message,
+.signupForm .offline-message {
+  display: none;
+}
+
+
+
+.dropdown-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #37415140, transparent);
+  margin: 10px 14px;
+}
+
+/* ================================================
+   WORKSPACE & EDITOR PANEL
+   ================================================ */
+.workspace { flex: 1; display: flex; overflow: hidden; }
+
+
+
+
+/* ================================================
+   TOOLS DROPDOWN - FIXED POSITIONING
+   ================================================ */
+/* FIX: Make Tools Dropdown behave like a button group */
+.tools-dropdown {
+  display: inline-flex !important; /* Forces it to sit side-by-side */
+  align-items: center;
+  height: 36px;       /* Matches button height */
+  margin: 0 4px;      /* Consistent spacing */
+  flex-shrink: 0;     /* Prevents it from squishing/overlapping neighbors */
+  position: relative; /* Keeps context for desktop (Mobile uses fixed) */
+  vertical-align: middle;
+}
+
+
+
+.tools-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--toolbar-bg);
+  cursor: pointer;
+  font-size: 13px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  transition: all .2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tools-btn:hover {
+  background: rgba(99,102,241,.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.tools-dropdown-content {
+  position: fixed;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  padding: 6px;
+  min-width: 180px;
+  margin-top: 4px;
+  animation: menuFade 0.2s ease-out;
+}
+
+.tools-dropdown-content.hidden { display: none; }
+
+.tools-dropdown-content button {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+}
+
+.tools-dropdown-content button:hover { background: #f1f5f9; }
+
+.mode-btn.active { 
+  box-shadow: 0 0 0 3px rgba(99,102,241,.15); 
+}
+
+/* Hide button text on small screens, show only icons */
+@media (max-width: 1066px) {
+  .plain-btn { padding: 6px 8px; }
+  .plain-btn .btn-text { display: none; }
+  .plain-btn .btn-icon { margin-right: 0; }
+}
+
+/* Scrollbars for toolbar */
+.toolbar-slider::-webkit-scrollbar { height: 4px; }
+.toolbar-slider::-webkit-scrollbar-track { background: transparent; }
+.toolbar-slider::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.2);
+  border-radius: 2px;
+}
+.toolbar-slider::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.4);
+}
+
+/* Animation for dropdown */
+@keyframes menuFade {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================================
+   EDITOR AREA
+   ================================================ */
+.editor-left {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  background: white;
+}
+
+#textEditor {
+  flex: 1; 
+  resize: none;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Consolas', monospace;
+  font-size: 14.5px;
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+  color: #1e293b;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+  overflow-y: auto;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(1.75em - 1px),
+    #f8fafc calc(1.75em - 1px),
+    #f8fafc 1.75em
+  );
+  background-attachment: local;
+}
+
+#textEditor:focus {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(99, 102, 241, 0.22),
+    0 2px 8px rgba(99, 102, 241, 0.12),
+    inset 0 1px 2px rgba(0,0,0,0.06);
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+#textEditor::-webkit-scrollbar { width: 10px; }
+#textEditor::-webkit-scrollbar-track { background: transparent; }
+#textEditor::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.25);
+  border-radius: 6px;
+  border: 2px solid #fff;
+  cursor: default;
+}
+#textEditor::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.4); }
+
+#textEditor::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+  font-weight: 400;
+}
+
+#textEditor::selection {
+  background: rgba(99, 102, 241, 0.22);
+  color: #1e293b;
+}
+
+#textEditor.preview-mode {
+  border-top: 3px solid #3b82f6;
+}
+
+/* ================================================
+   BOTTOM FIND/REPLACE DOCK
+   ================================================ */
+.find-dock {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+  background: linear-gradient(180deg,#fff,#fbfdff);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px; box-shadow: 0 6px 18px rgba(16,24,40,.06);
+}
+.find-dock.hidden { display: none; }
+.find-dock-row { 
+  display: flex; 
+  gap: 8px; 
+  align-items: center;
+  flex-wrap: wrap; 
+}
+#dock_close { margin-left: auto; order: 99; }
+.find-dock-row input[type=text] {
+  padding: 8px; border-radius: 6px; border: 1px solid var(--border);
+  font-size: 14px;
+}
+.find-dock-row .dock-checkbox {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px;
+}
+.find-dock-row button {
+  padding: 8px 10px; border-radius: 6px; border: 0;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  color: #fff; cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.find-dock-row button:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.close-btn { background: #fff; border: 1px solid var(--border); color: #333; padding: 6px 8px; }
+
+/* ================================================
+   RIGHT SIDEBAR
+   ================================================ */
+.editor-right {
+  width: 280px;
+  min-width: 280px;
+  background: #ffffff;
+  border-left: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.06);
+}
+
+/* Tabs */
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 0 4px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 14px 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #64748b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  position: relative;
+  border-radius: 8px 8px 0 0;
+  margin: 3px 2px;
+}
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: #3b82f6;
+  border-radius: 2px;
+  transition: all 0.22s ease;
+  transform: translateX(-50%);
+}
+.tab-btn:hover {
+  color: #1e293b;
+  background: #e2e8f0;
+}
+.tab-btn.active {
+  color: #1e293b;
+  font-weight: 700;
+  background: #ffffff;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+}
+.tab-btn.active::after { width: 70%; }
+
+/* Content */
+.sidebar-content {
+  height: 100%;  
+  flex: 1;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  padding: 12px 16px 0 16px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #334155;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.sidebar-content::-webkit-scrollbar { display: none; }
+
+/* Tab Panels */
+.tab-panel { display: none !important; }
+.tab-panel.active {
+  display: flex !important;
+  flex-direction: column;
+  min-height: 100%;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Info Sections */
+.info-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.info-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.info-section h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.info-section h4::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+}
+
+/* Detail Rows */
+.detail-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 9px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.detail-row label {
+  color: #64748b;
+  font-weight: 500;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+.detail-row span {
+  color: #1e293b;
+  font-weight: 400;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+/* Fixed selector to match HTML: <span class="filename-display"> */
+.filename-display {
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+
+/* Encryption Badge */
+.encryption-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1.5px solid #bbf7d0;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #166534;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
+  letter-spacing: 0.01em;
+}
+.encryption-badge svg {
+  width: 17px;
+  height: 17px;
+  fill: #16a34a;
+}
+
+/* Version List - Modern Card Style (Subtle Background) */
+.version-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  font-size: 13.5px;
+}
+.version-list li {
+  padding: 12px 14px;
+  margin: 8px 0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #f9fafb; 
+  background: linear-gradient(135deg, #ffffff, #f8fafc); 
+  line-height: 1.4;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.version-list li:hover {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.version-list li:hover::before {
+  opacity: 0.8;
+  background: #94a3b8;
+}
+.version-list li.selected {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-color: #3b82f6;
+  border-left: 3px solid #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+  font-weight: 600;
+}
+.version-list li.selected::before {
+  opacity: 1;
+  background: #3b82f6;
+}
+.version-list li strong {
+  display: block;
+  color: #1e293b;
+  font-size: 13.5px;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+.version-list li.selected strong {
+  color: #1e40af;
+  font-weight: 600;
+}
+.version-list li small {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.version-list li.selected small {
+  color: #475569;
+}
+.version-list li.muted {
+  color: #94a3b8;
+  font-style: italic;
+  cursor: default;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.version-list li.muted:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+.version-list li.muted::before {
+  display: none;
+}
+/* ================================================
+   STICKY BOTTOM BOX - LOOK 1: Clean Accent Box (No Gradient, No Before, No Dark)
+   ================================================ */
+.sticky-bottom-box {
+  position: sticky;
+  bottom: 0;
+  
+  /* NEW LOOK: Solid Very Light Background */
+  background: #f7f9fc; 
+  
+  /* NEW LOOK: Main accent text color */
+  color: #374151; 
+  
+  padding: 10px 38px 10px 8px; 
+  text-align: center;
+  
+  /* Strong accent border on one side */
+  border-radius: 12px; 
+  border-left: 5px solid var(--accent1); /* Strong Indigo left border */
+  
+  font-size: 13.5px; 
+  line-height: 1.5;
+  
+  /* Clean, subtle shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+  
+  white-space: normal;
+  margin-top: auto; 
+}
+/* ... existing .sticky-bottom-box styles ... */
+.sticky-bottom-box {
+  /* Keep existing styles, add these lines: */
+  padding-right: 30px; /* Make space for the close button */
+  position: sticky;    /* Ensure it acts as an anchor for absolute children */
+}
+
+.footer-close-btn {
+  position: absolute;
+  right: 4px; /* Tucked closer to the edge */
+  top: 50%;
+  transform: translateY(-50%);
+  
+  /* Larger Hit Area & Icon */
+  width: 32px; 
+  height: 32px;
+  font-size: 24px; /* Bigger X */
+  
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  
+  /* Centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.footer-close-btn:hover {
+  color: #475569;
+  background: rgba(0, 0, 0, 0.05);
+}
+.pro-text {
+    padding-top: 4px;
+}
+/* Ensure links inside the box stand out */
+.sticky-bottom-box a {
+    color: var(--accent1) !important; /* Use the main Indigo color */
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.3);
+}
+/* Add this new CSS section near the existing .info-section styles */
+/* =========================================
+   DECORATED VERSION HISTORY TITLE
+   ========================================= */
+
+/* Adjust the main H4 to align items better and remove the old circle decoration */
+.info-section h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+/* Remove the old blue circle */
+.info-section h4::before {
+  content: none;
+}
+
+/* Style the icon inside H4 */
+.info-section h4 svg.btn-icon {
+    width: 20px;
+    height: 20px;
+    fill: none; 
+    stroke: #4f46e5; 
+    flex-shrink: 0;
+}
+
+/* --- MODIFICATION STARTS HERE --- */
+.version-title-group {
+    /* Use flex to align children (span and badge) */
+    display: flex;
+    /* Make the entire group span the remaining width of the H4 container */
+    flex: 1;
+    /* Space out the title and the badge to the left and right edges of the group */
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px; /* Maintain a minimum gap */
+}
+
+/* Ensure the 'History' text is not taking up unnecessary space (it is already just text) */
+.version-title-group span:first-child {
+    /* Set a max width or minimum width if necessary, but flex:1 on the container should handle spacing */
+    white-space: nowrap; /* Prevent wrapping for the title */
+    min-width: 0;
+}
+/* --- MODIFICATION ENDS HERE --- */
+
+/* Base style for the status badge */
+.version-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevent the badge from shrinking */
+}
+
+/* ... (rest of the badge styles remain the same) */
+.badge-guest {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+.badge-free {
+    background: #e0f2fe;
+    color: #0c4a6e;
+    border: 1px solid #7dd3fc;
+}
+
+.badge-premium {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #86efac;
+    box-shadow: 0 0 0 1px #4ade80;
+}
+/* ================================================
+   PREVIEW BANNER
+   ================================================ */
+.preview-banner {
+  /* Changed from absolute/bottom to relative flex item */
+  position: relative; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  /* Match Toolbar dimensions */
+  width: 100%;
+  height: 46px; /* Slightly taller than toolbar buttons for emphasis */
+  padding: 0 16px;
+  
+  background: #fffbeb; /* Light Amber/Yellow for "Warning/Preview" context */
+  border-bottom: 1px solid #e2e8f0;
+  
+  font-size: 14px;
+  font-weight: 500;
+  color: #92400e; /* Amber-800 */
+  z-index: 50;
+  flex-shrink: 0; /* Prevents squishing */
+  box-sizing: border-box;
+}
+
+.preview-banner .banner-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.preview-banner .banner-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.preview-banner button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+#restoreBtn {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+#restoreBtn:hover {
+  background: #2563eb;
+}
+#cancelBtn {
+  background: #ffffff;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+#cancelBtn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* ================================================
+   NEW SETTINGS MODAL (Professional Theme) - FIXED
+   namespace: st-
+   ================================================ */
+
+.st-modal {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.75); /* Darker backdrop */
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 1; visibility: visible;
+  transition: all 0.2s ease;
+}
+.st-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.st-card {
+  background: #fff; 
+  width: 100%; max-width: 500px;
+  
+  /* --- FIX 1: FIXED HEIGHT --- */
+  height: 580px; 
+  max-height: 90vh;
+  
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* Header */
+.st-header {
+  padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fff; 
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+.st-user-summary { display: flex; align-items: center; gap: 14px; }
+.st-avatar-large {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  color: white; font-size: 18px; font-weight: 700;
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+}
+.st-user-details h3 { margin: 0; font-size: 16px; font-weight: 700; color: #0f172a; }
+.st-user-details span { font-size: 13px; color: #64748b; }
+
+.st-close-btn {
+  background: transparent; border: none; color: #cbd5e1; cursor: pointer;
+  padding: 6px; border-radius: 8px; transition: all 0.2s;
+}
+.st-close-btn:hover { background: #f1f5f9; color: #334155; }
+
+/* Tabs */
+.st-tabs {
+  display: flex; padding: 0 24px; border-bottom: 1px solid #e2e8f0;
+  background: #fff; flex-shrink: 0; gap: 24px;
+}
+.st-tab-btn {
+  background: none; border: none; padding: 16px 0;
+  font-size: 14px; font-weight: 500; color: #64748b; cursor: pointer;
+  position: relative; transition: color 0.2s;
+}
+.st-tab-btn:hover { color: #334155; }
+.st-tab-btn.active { color: #4f46e5; font-weight: 600; }
+.st-tab-btn.active::after {
+  content:''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 2px; background: #4f46e5; border-radius: 2px 2px 0 0;
+}
+
+/* Body */
+.st-body { 
+  padding: 28px; 
+  /* --- FIX 1: FILL SPACE --- */
+  flex: 1; 
+  overflow-y: auto; 
+  background: #fcfcfc;
+}
+
+.st-tab-content { display: none; height: 100%; }
+.st-tab-content.active { 
+  display: flex; 
+  flex-direction: column; 
+  animation: fadeIn 0.3s ease;
+}
+
+/* Plan Card */
+.st-section-card {
+  border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px;
+  background: #fff; margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.st-section-card.pro { border-color: #c7d2fe; background: linear-gradient(to bottom right, #eff6ff, #fff); }
+
+.st-row-between { display: flex; justify-content: space-between; align-items: center; }
+.st-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; margin-bottom: 6px; }
+.st-value-large { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+.st-badge {
+  background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 700;
+  padding: 4px 10px; border-radius: 99px;
+}
+.pro .st-badge { background: #4f46e5; color: white; }
+.st-divider { height: 1px; background: #e2e8f0; margin: 16px 0; }
+.pro .st-divider { background: #e0e7ff; }
+.st-subtext { font-size: 13px; color: #64748b; font-weight: 500; }
+
+/* Stats Grid */
+.st-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.st-stat-box {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.st-stat-label { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+.st-stat-value { font-size: 18px; font-weight: 700; color: #334155; }
+.text-green { color: #16a34a; }
+
+/* Forms & Inputs */
+.st-form-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.st-input {
+  width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1;
+  border-radius: 10px; font-size: 14px; transition: all 0.2s;
+  background: #fff;
+}
+.st-input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+
+.st-info-box {
+  background: #fffbeb; color: #92400e; padding: 12px 16px; border-radius: 10px;
+  font-size: 13px; line-height: 1.5; margin-bottom: 20px; border: 1px solid #fde68a;
+  display: flex; gap: 10px;
+}
+.st-info-box::before { content: "ⓘ"; font-weight: bold; }
+
+.st-actions-right { display: flex; justify-content: flex-end; margin-top: auto; }
+
+/* --- FIX 2: DATA TAB STYLING --- */
+.st-action-grid {
+  display: grid; gap: 16px; margin-bottom: 24px;
+}
+
+.st-action-card-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer; transition: all 0.2s ease;
+  color: #334155;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  height: 120px; /* Fixed height for squares */
+}
+.st-action-card-btn:hover {
+  border-color: #6366f1;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+  color: #4f46e5;
+}
+.st-action-card-btn svg { width: 28px; height: 28px; opacity: 0.8; }
+.st-action-text { font-size: 14px; font-weight: 600; }
+
+.st-danger-section {
+  margin-top: auto; /* Pushes to bottom */
+  border-top: 1px solid #e2e8f0;
+  padding-top: 24px;
+}
+.st-danger-row {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #fef2f2; border: 1px solid #fecaca;
+  padding: 16px; border-radius: 12px;
+}
+.st-danger-info strong { display: block; color: #991b1b; font-size: 14px; margin-bottom: 4px; }
+.st-danger-info p { margin: 0; color: #b91c1c; font-size: 12px; opacity: 0.8; }
+
+/* Buttons */
+.st-btn-primary {
+  background: #4f46e5; color: white; border: none; padding: 12px 20px;
+  border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer;
+  transition: background 0.2s;
+}
+.st-btn-primary:hover { background: #4338ca; }
+.st-btn-primary.small { padding: 8px 16px; font-size: 13px; }
+
+.st-btn-danger {
+  background: white; color: #ef4444; border: 1px solid #fecaca; padding: 10px 16px;
+  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s;
+}
+.st-btn-danger:hover { background: #ef4444; color: white; border-color: #ef4444; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* TOAST — Light Green, Basic */
+.app-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: #ecfdf5;
+  color: #166534;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  min-width: 130px;
+  text-align: center;
+  border: 1px solid #bbf7d0;
+}
+
+.app-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.app-toast::before {
+  content: '✓';
+  margin-right: 6px;
+  font-weight: 900;
+}
+/* Sidebar Action Buttons (Share & Download) */
+.sidebar-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.sidebar-action-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.sidebar-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Specific color tweaks if desired */
+#infoShare:hover {
+  color: #0891b2; /* Cyan/Teal hover for share */
+  border-color: #a5f3fc;
+  background: #ecfeff;
+}
+
+/* =========================================
+   FOLDER SECTION STYLES (Professional Look)
+   ========================================= */
+
+/* Folders Section: Now only a container for the items */
+.folders-section {
+  padding: 6px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.15);
+}
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2px; /* ← This adds the small vertical gap between folders */
+}
+
+.folder-item:last-child {
+  margin-bottom: 0; /* Removes gap after the last folder for clean spacing */
+}
+
+.folder-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.folder-item:hover::before {
+  opacity: 1;
+}
+
+.folder-item:hover {
+  background: rgba(241, 245, 249, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.folder-item.active {
+  background: rgba(99, 102, 241, 0.15);
+  font-weight: 700;
+}
+
+.folder-item.active .folder-icon {
+  stroke: var(--accent1);
+  transform: scale(1.1);
+}
+
+.folder-icon {
+  width: 20px;
+  height: 20px;
+  stroke: #94a3b8;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.folder-name {
+  font-size: 14.5px;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Folder Icon - Reuses .btn-icon styles for sizing, adding a stroke color */
+.folder-item .folder-icon {
+    width: 18px; 
+    height: 18px; 
+    margin-right: 0;
+    vertical-align: middle; 
+    fill: none;
+    stroke: #64748b;
+    flex-shrink: 0;
+}
+/* Active Icon Color */
+.folder-item.active .folder-icon {
+    stroke: var(--accent1);
+}
+
+/* Base Header for Categories (must be flex for alignment) */
+.categories-header {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+/* Clickable Area and Hover (The main change) */
+.category-toggle-header {
+  cursor: pointer;
+  padding: 6px 6px 8px 6px; /* Expanded clickable area */
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category-toggle-header:hover {
+  background: rgba(99, 102, 241, .04); /* Subtle hover effect */
+  color: var(--accent1); 
+}
+
+/* Chevron Icon Container */
+.categories-chevron {
+  display: flex; /* Centers the SVG */
+  align-items: center;
+  justify-content: center;
+  width: 18px; /* Space for the chevron */
+  height: 18px;
+  flex-shrink: 0;
+  margin-right: 1px; /* Gap before the title */
+}
+
+/* Chevron Icon Styling */
+.categories-chevron .chevron-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3; /* Thicker stroke for visibility */
+}
+
+/* Title takes remaining space */
+.categories-title {
+  flex: 1;
+  color: var(--accent1); /* Uses Indigo */
+  font-weight: 700; /* Less heavy */
+  opacity: 0.95;
+  letter-spacing: 0.5px; /* Wider spacing */
+  transition: all 0.3s ease;
+  font-family: 'Cantarell', system-ui, -apple-system, sans-serif;
+  font-size: 15px;          
+  text-transform: none;
+}
+/* Add Button (moves to the right, restored the + button logic) */
+.categories-add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: auto; /* Pushes the button to the far right */
+}
+
+.categories-add-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent1);
+}
+.folder-name {
+  /* Ensure the name can take remaining space, if it was fixed-width before */
+  flex: 1; 
+  min-width: 0;
+}
+
+.folder-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  flex-shrink: 0; /* Important: prevents the count from shrinking */
+  line-height: 1;
+}
+
+.folder-item.active .folder-count {
+  background: #ffffff;
+  color: var(--accent1);
+}
+.notes-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px 12px 0px; /* Ensure padding is consistent */
+}
+.notes-header-row::before {
+  content: ''; 
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='8' y1='6' x2='21' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='12' x2='21' y2='12'%3E%3C/line%3E%3Cline x1='8' y1='18' x2='21' y2='18'%3E%3C/line%3E%3Ccircle cx='3' cy='6' r='1.2' fill='%2394a3b8' stroke='none'/%3E%3Ccircle cx='3' cy='12' r='1.2' fill='%2394a3b8' stroke='none'/%3E%3Ccircle cx='3' cy='18' r='1.2' fill='%2394a3b8' stroke='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px; /* Even larger */
+  opacity: 0.6;
+  margin-right: 6px;
+}
+/* Small, flat button for the New Note action next to the title */
+.new-note-btn-small {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #eef2ff; /* Very light blue background */
+    border: 1px solid #c7d2fe;
+    color: var(--accent1);
+    font-size: 18px; 
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.new-note-btn-small:hover {
+    background: #dbeafe; /* Slightly darker blue on hover */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.notes-header-collapsed {
+    padding-top: 18px !important; /* Increase separation */
+    border-top: 1px solid #e2e8f0; /* Add a distinct separator line */
+    margin-top: 10px; /* Add space above the separator */
+}
+/* =========================================
+   SHARE MODAL SPECIFIC STYLES
+   ========================================= */
+
+/* Layout for the Input + Copy Button row */
+.share-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.share-input-readonly {
+  background-color: #f8fafc;
+  color: #334155;
+  font-family: monospace; /* Makes the URL look technical/precise */
+  font-size: 13px;
+  border-color: #e2e8f0;
+}
+
+.share-input-readonly:focus {
+  border-color: #cbd5e1;
+  box-shadow: none; /* Remove focus glow for readonly */
+}
+
+/* Ensure the success state animates in */
+#shareResult.hidden,
+#shareStepConfig.hidden {
+  display: none;
+}
+
+#shareResult {
+  animation: fadeIn 0.3s ease;
+}
+
+/* ================================================
+   3. EDITOR CONTENT & TYPOGRAPHY
+   ================================================ */
+
+/* Wrapper for Tiptap to ensure it takes full height */
+.tiptap-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ProseMirror is the actual editable div from Tiptap */
+.ProseMirror {
+  flex: 1;
+  overflow-y: auto;
+  cursor: text;
+  
+  /* Match #textEditor base styles */
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 24px 32px; /* Slightly more padding for document feel */
+  
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #334155; /* Slate 700 */
+  
+  /* Match #textEditor shadows & transition */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+}
+
+/* --- THE FOCUS EFFECT (Matches Plain Text Editor) --- */
+.ProseMirror:focus {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(99, 102, 241, 0.22),
+    0 2px 8px rgba(99, 102, 241, 0.12),
+    inset 0 1px 2px rgba(0,0,0,0.06);
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Scrollbar styling for ProseMirror to match #textEditor */
+.ProseMirror::-webkit-scrollbar { width: 10px; }
+.ProseMirror::-webkit-scrollbar-track { background: transparent; }
+.ProseMirror::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.25);
+  border-radius: 6px;
+  border: 2px solid #fff;
+}
+.ProseMirror::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.4); }
+
+/* --- TYPOGRAPHY STYLES --- */
+
+.ProseMirror p { margin-bottom: 1em; }
+
+.ProseMirror h1 { font-size: 2em; font-weight: 800; color: #0f172a; margin-top: 1.2em; margin-bottom: 0.6em; line-height: 1.2; letter-spacing: -0.02em; }
+.ProseMirror h2 { font-size: 1.5em; font-weight: 700; color: #1e293b; margin-top: 1.2em; margin-bottom: 0.5em; letter-spacing: -0.01em; }
+.ProseMirror h3 { font-size: 1.25em; font-weight: 600; color: #334155; margin-top: 1em; margin-bottom: 0.5em; }
+
+.ProseMirror ul, .ProseMirror ol { padding-left: 1.5em; margin-bottom: 1em; color: #334155; }
+.ProseMirror li { margin-bottom: 0.25em; }
+
+.ProseMirror blockquote {
+  border-left: 4px solid #6366f1; /* Indigo Accent */
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5em 0;
+  color: #475569;
+  font-style: italic;
+}
+
+.ProseMirror pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 1.5em 0;
+  overflow-x: auto;
+}
+
+.ProseMirror code {
+  background: #f1f5f9;
+  color: #db2777; /* Pink 600 */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+}
+
+.ProseMirror a { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; transition: color 0.2s; }
+.ProseMirror a:hover { color: #1d4ed8; }
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  margin: 1em 0;
+}
+
+/* Placeholder Styling */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #94a3b8;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+/* ================================================
+   1. EDITOR LAYOUT & WRAPPERS (Flush Design)
+   ================================================ */
+
+/* 1. Reset the main container padding to 0 so the toolbar touches edges */
+.editor-container {
+  position: relative; /* REQUIRED so the spinner stays inside this box */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #ffffff;
+  overflow: hidden;
+  padding: 0px 6px 6px 6px;
+}
+/* 2. The wrapper for each mode (Plain vs Rich) */
+.editor-mode-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+.editor-mode-wrapper.hidden {
+  display: none !important;
+}
+/* ================================================
+   TOP TOOLBAR - FIXED SCROLLING BEHAVIOR
+   ================================================ */
+
+/* 1. CONTAINER: Must allow overflowing content (dropdowns) to pass through */
+.toolbar-container {
+  z-index: 20;
+  flex-shrink: 0;
+  padding: 1px 0 0 0;
+  margin-bottom: 5px;
+  position: relative;
+  border-right: none;
+  border-radius: 0 0 8px 8px;
+  overflow: visible !important; /* CRITICAL FOR DESKTOP */
+}
+
+/* 2. SLIDER - DESKTOP DEFAULT: No Scrollbars, Floating Dropdowns */
+.toolbar-slider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: auto;
+  padding-bottom: 0;
+  
+  /* CRITICAL: Allows dropdowns to hang outside the toolbar */
+  overflow: visible !important; 
+}
+/* =================================================================
+   MOBILE RESPONSIVENESS (Max Width 768px)
+   ================================================================= */
+
+@media (max-width: 768px) {
+  /* 1. Global Viewport Lockdown */
+  html, body, .app {
+    height: 100dvh; /* Dynamic height handles mobile address bar */
+    overflow: hidden; /* Stops the whole page from bouncing */
+  }
+
+  .workspace {
+    width: 100%;
+    margin: 0;
+    height: 100dvh; 
+    display: flex;
+  }
+
+  /* 2. Fixed Header & Toolbar Logic */
+  .editor-container {
+    padding: 0;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column; /* Stack: Header -> Toolbar -> Editor */
+    overflow: hidden; 
+    position: relative;
+  }
+
+  .mobile-header {
+    display: flex;
+    flex-shrink: 0; /* Header size is fixed */
+    height: 50px;
+    z-index: 1010; /* Above everything including sidebars */
+    background: #ffffff;
+    position: relative;
+  }
+
+  .toolbar-container {
+    flex-shrink: 0; /* Toolbar size is fixed */
+    margin-bottom: 0;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    overflow: visible !important; /* Allow dropdowns to hang over */
+    z-index: 10; 
+  }
+
+  /* 3. Scrolling Editor Logic (Independent Scroll) */
+  .editor-left {
+    flex: 1; /* Fills remaining height */
+    overflow-y: auto; /* Only the editor scrolls */
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+
+  #textEditor, .ProseMirror {
+    flex: 1;
+    height: auto;
+    border: none !important;
+    border-radius: 0 !important;
+    padding-top: 15px;
+    padding-bottom: 40px; /* Space for mobile keyboard padding */
+  }
+
+  /* 4. Toolbar Slider Logic */
+  .toolbar-slider {
+    overflow-x: auto !important;
+    overflow-y: hidden !important; 
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px; 
+    display: flex;
+    align-items: center;
+    scrollbar-width: thin; 
+    scrollbar-color: var(--accent1) transparent;
+  }
+
+  .toolbar-slider::-webkit-scrollbar {
+    height: 3px;
+    display: block;
+  }
+  .toolbar-slider::-webkit-scrollbar-thumb {
+    background: var(--accent1);
+    border-radius: 10px;
+  }
+
+  .tools-dropdown {
+    margin-left: 16px;
+  }
+
+  /* 5. Mobile Sidebars (Drawers) - Corrected Overlay & Visibility */
+  .sidebar, .editor-right {
+    position: fixed;
+    top: 50px; /* Below Header */
+    bottom: 0;
+    height: calc(100dvh - 50px);
+    background: #ffffff;
+    z-index: 1005; /* Above toolbar, below header */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
+    visibility: hidden; /* Prevents ghost-clicking when closed */
+  }
+
+  .sidebar {
+    left: 0;
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 25px rgba(0,0,0,0.1);
+    border-right: none;
+    display: flex;
+  }
+
+  .editor-right {
+    right: 0;
+    width: 300px;
+    transform: translateX(100%);
+    box-shadow: -10px 0 25px rgba(0,0,0,0.1);
+    border-left: none;
+  }
+
+  .sidebar.active, .editor-right.active {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .sidebar .sb-head {
+    display: none; /* Hide logo inside the drawer */
+  }
+
+  /* 6. Fixed Dropdowns on Mobile */
+  .tools-dropdown-content, 
+  .dropdown-menu,
+  #editorModeDropdownPlain,
+  #editorModeDropdownRich {
+    position: fixed !important;
+    top: 95px !important; /* Header(50) + Toolbar(approx 45) */
+    right: 10px !important; 
+    left: auto !important;
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    z-index: 10020 !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  }
+}
+
+/* 4. CONTENT WRAPPERS */
+.toolbar-panel, .simple-toolbar {
+  display: flex !important; 
+  gap: 8px; 
+  align-items: center;
+  height: 36px;
+  min-width: min-content;
+}
+
+/* Helper to push items right */
+.ml-auto { margin-left: auto !important; }
+
+/* 5. BUTTON STYLES (Unchanged) */
+.toolbar-btn, .btn-group-item, .rich-btn-item {
+  padding: 10px 14px; 
+}
+
+.plain-btn {
+  padding: 6px 12px; 
+  border-radius: 8px;
+  border: 1px solid var(--border); 
+  background: var(--toolbar-bg);
+  cursor: pointer; 
+  font-size: 13px; 
+  height: 36px;
+  display: flex; 
+  align-items: center; 
+  flex-shrink: 0;
+  transition: all .2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  white-space: nowrap;
+}
+
+.plain-btn:hover {
+  background: rgba(99,102,241,.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.plain-btn:active {
+  background: rgba(99,102,241,.2);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.08);
+}
+
+/* 6. RICH TEXT BUTTONS & DROPDOWNS */
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  background: #ffffff;
+  border-radius: 8px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.toolbar-btn:hover {
+  background: #f8fafc;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.12), 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.toolbar-btn.is-active {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.simple-toolbar .divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+  margin: 0 4px;
+}
+
+.dropdown {
+  position: relative;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-trigger {
+  width: auto !important;
+  height: 36px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 550;
+  color: #334155;
+  gap: 6px;
+  justify-content: space-between;
+  min-width: 90px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+}
+.dropdown-trigger:hover {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.dropdown-menu {
+  display: none; 
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 140px;
+  z-index: 100;
+  padding: 4px;
+  flex-direction: column;
+}
+
+.dropdown.is-open .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-item {
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.dropdown-item:hover {
+  background: #f1f5f9;
+  color: #1d4ed8;
+}
+
+.color-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  padding: 11px 14px !important;
+  cursor: pointer;
+}
+
+.color-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+.color-wrapper:hover {
+  background-color: #f9fafb !important;
+  z-index: 2;
+}
+
+.simple-toolbar .switch-mode-btn {
+  margin-left: auto !important; 
+  height: 36px; 
+  padding: 0 12px;
+  background: #ffffff;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.simple-toolbar .switch-mode-btn:hover {
+  background: #f8fafc;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+/* =========================================
+   NEW MODERN BUTTON GROUPS (Tailwind-like)
+   ========================================= */
+
+/* The container for a set of merged buttons */
+.btn-group {
+  display: inline-flex;
+  vertical-align: middle;
+  /* Optional: Add shadow if you like, similar to the snippet's focus ring idea */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 8px; /* rounded-lg */
+  margin-right: 8px; /* Space between groups */
+}
+
+
+
+
+/* =========================================
+   VERTICAL DROPDOWN BUTTONS (Tools Menu)
+   ========================================= */
+
+/* Override specific container styles if necessary to allow flush buttons */
+.tools-dropdown-content {
+  position: absolute;
+  top: calc(100% + 6px); /* Slight gap from button */
+  right: 0;
+  z-index: 100;
+  min-width: 200px;      /* Wider for better readability */
+  padding: 6px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0; /* gray-200 */
+  border-radius: 12px;       /* rounded-xl */
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1); /* Deep shadow */
+  animation: dropIn 0.1s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* The vertical button styling */
+.tool-vertical-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  gap: 12px;
+}
+
+/* Remove border from the last item */
+.tool-vertical-btn:last-child {
+  border-bottom: none;
+}
+
+/* Hover State - Light Indigo Background + Darker Text */
+.tool-vertical-btn:hover {
+  background-color: #f3f4f6; /* gray-100 */
+  color: #111827;            /* gray-900 */
+}
+
+/* Force SVGs to change color on hover */
+.tool-vertical-btn:hover svg,
+.tool-vertical-btn:hover svg path {
+  stroke: currentColor;
+}
+
+/* Focus State - Fix: Use focus-visible */
+.tool-vertical-btn:focus {
+  outline: none;
+}
+
+.tool-vertical-btn:focus-visible {
+  background-color: #f3f4f6;
+  color: #4f46e5;
+}
+
+.tool-vertical-btn:focus-visible svg {
+  stroke: #4f46e5;
+}
+
+/* Icon Styling inside vertical btn */
+.tool-vertical-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+.mode-check-icon {
+  margin-left: auto; /* Push to far right */
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s;
+  color: #4f46e5; /* Indigo */
+}
+.tool-vertical-btn.selected {
+  background-color: #eef2ff; /* indigo-50 */
+  color: #4338ca;            /* indigo-700 */
+  font-weight: 600;
+}
+.tool-vertical-btn.selected .mode-check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Override existing specific rules if they conflict */
+.tools-dropdown-content button {
+  margin: 0 !important; /* Reset margin from previous CSS */
+  border-radius: 0 !important;
+}
+/* =========================================
+   RICH TEXT TOOLBAR (Tailwind-like Blue Theme)
+   ========================================= */
+/* Prevent icons from capturing clicks/focus events */
+.rich-btn-item svg,
+.btn-group-item svg {
+  pointer-events: none;
+}
+/* Group Container */
+.rich-btn-group {
+  display: inline-flex;
+  vertical-align: middle;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  margin-right: 12px; /* Gap between groups */
+}
+
+/* Individual Button */
+.rich-btn-item {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px; /* Adjusted padding for better touch target */
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  color: #111827; /* gray-900 */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: -1px;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+/* Corner Rounding Logic */
+.rich-btn-item:first-child {
+  margin-left: 0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.rich-btn-item:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Hover State */
+.rich-btn-item:hover {
+  background-color: #eef2ff; /* Light Indigo background */
+  color: #4338ca;            /* Dark Indigo text */
+  border-color: #c7d2fe;     /* Light Indigo border */
+  z-index: 2;                /* Ensure border overlaps neighbors */
+}
+
+/* Active / Focus State (Blue Theme) */
+.rich-btn-item.is-active,
+.rich-btn-item:focus-visible {
+  background-color: #3b82f6; /* blue-500 */
+  color: #ffffff;            /* text-white */
+  border-color: #3b82f6;
+  z-index: 10;
+  outline: none;
+}
+
+/* SVG styling */
+.rich-btn-item svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  stroke: currentColor; /* Inherits text color (gray or white) */
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Heading Dropdown Customization to match Rich Toolbar */
+.rich-dropdown-trigger {
+  border-radius: 8px !important; /* Standalone rounded */
+  min-width: 110px;
+  justify-content: space-between;
+}
+/* =========================================
+   TAILWIND-STYLE DROPDOWN ITEMS
+   ========================================= */
+
+/* The dropdown container styling (if not already set) */
+.dropdown-menu {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  border-radius: 8px;        /* rounded-lg */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  padding: 4px;              /* p-1 */
+  min-width: 160px;
+}
+
+/* The individual items */
+.dropdown-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 8px 12px;         /* py-2 px-3 */
+  font-size: 14px;           /* text-sm */
+  line-height: 1.25rem;
+  color: #000000;            /* text-gray-700 */
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;        /* rounded-md */
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-weight: 400;
+}
+
+/* Hover State */
+.dropdown-item:hover {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  color: #111827;            /* text-gray-900 */
+}
+
+/* Active/Focus State */
+.dropdown-item:focus {
+  outline: none;
+  background-color: #f3f4f6;
+  color: #4f46e5;            /* text-indigo-600 */
+}
+/* =========================================
+   RICH PREVIEW MODAL (INTERACTIVE SANDBOX)
+   ========================================= */
+
+/* The Editor Container inside the modal */
+.sandbox-editor-container {
+  display: flex; 
+  flex-direction: column; 
+  height: 450px; 
+  background: white; 
+  position: relative;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* The actual editable area in the modal */
+#previewEditorBody {
+  flex: 1;
+  overflow-y: auto;
+  cursor: text;
+  background: #fff;
+}
+
+/* Make the TipTap instance fill the body */
+#previewEditorBody .ProseMirror {
+  min-height: 100%;
+  padding: 20px 30px 80px 30px; /* Bottom padding for footer */
+  outline: none;
+}
+
+/* Sticky Upgrade Footer */
+.sandbox-footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+.sandbox-text {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+/* Fix: Blue line on top for Rich Editor in Preview Mode */
+.ProseMirror.preview-mode {
+  border-top: 3px solid #3b82f6 !important;
+  border-top-left-radius: 4px; /* Slight adjustment to look good with the line */
+  border-top-right-radius: 4px;
+}
+/* Fix for rich toolbar icons */
+.rich-btn-item > .btn-icon,
+#tiptapToolbar .btn-icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+/* Override any existing btn-icon styling for toolbar */
+.toolbar-panel .btn-icon {
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 !important;
+}
+/* Version loading indicator */
+.version-loading {
+  opacity: 0.7;
+  cursor: not-allowed !important;
+}
+
+.loading-dots {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--accent1);
+  animation: pulse 1.5s infinite;
+}
+
+.loading-dots::after {
+  content: '...';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* =================================================================
+   MOBILE RESPONSIVENESS (Max Width 768px)
+   ================================================================= */
+
+/* 1. Base Styles for Mobile Header */
+.mobile-header {
+  display: none; /* Hidden on desktop */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  height: 50px;
+  position: relative;
+  z-index: 1001; /* HIGHER than sidebar so button remains clickable */
+}
+
+/* Mobile Logo Adjustments */
+.mobile-logo .logo-icon {
+  height: 24px; /* Slightly smaller for mobile header */
+  width: 24px;
+}
+.mobile-logo .logo-text {
+  font-size: 20px; /* Slightly smaller text */
+}
+
+.mobile-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.mobile-btn:active {
+  background: #f1f5f9;
+}
+
+.mobile-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* 2. Mobile Overlay (Backdrop) */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 999; /* Behind Sidebar, Above Content */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* =========================================
+   MEDIA QUERY
+   ========================================= */
+@media (max-width: 768px) {
+
+  /* A. Show Mobile Header */
+  .mobile-header {
+    display: flex;
+  }
+  .tools-dropdown {
+    margin-left: 16px; /* Creates space between the Replace group and Tools button */
+  }
+  /* B. Transform Left Sidebar into Drawer */
+  .sidebar {
+    position: fixed;
+    top: 50px; /* Starts BELOW the header */
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: #ffffff;
+    z-index: 1000; /* Between Overlay and Header */
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 10px 0 25px rgba(0,0,0,0.1);
+    border-right: none;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  /* C. Transform Right Sidebar (Info/History) into Drawer */
+  .editor-right {
+    position: fixed;
+    top: 50px; /* Starts BELOW the header */
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    background: #ffffff;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 25px rgba(0,0,0,0.1);
+    border-left: none;
+  }
+
+  .editor-right.active {
+    transform: translateX(0);
+  }
+
+  /* D. Editor Area adjustments */
+  .workspace {
+    width: 100%;
+    margin: 0;
+    /* Height is viewport minus header */
+    height: calc(100vh - 50px); 
+  }
+
+
+
+
+
+  /* F. Hide Logo inside Sidebar (since it's now in the header) */
+  .sidebar .sb-head {
+    display: none;
+  }
+}
+
+
+/* Global App Loader - Total Coverage */
+.app-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff; /* Solid white - nothing peeks through */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999; /* Higher than any sidebar, modal, or toolbar */
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Ensure nothing else is clickable while loading */
+.app-loader:not(.hidden) {
+  pointer-events: all;
+}
+
+.app-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden; /* Extra safety to prevent ghosting */
+}
+
+/* Spinner and text styling */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner-circle {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f1f5f9;
+  border-top: 4px solid var(--accent1);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+#loaderMessage {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* Local Editor Loader */
+.editor-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.85); /* Slightly transparent */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100; /* Higher than toolbar and editors */
+  gap: 12px;
+  color: var(--accent1);
+  font-weight: 500;
+  backdrop-filter: blur(2px); /* Optional: makes it look modern */
+}
+
+.editor-loader.hidden {
+  display: none;
+}
+
+/* Reusing the spinner animation from your global loader */
+.editor-loader .spinner-circle {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid var(--accent1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.empty-state-overlay {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80; /* Below loader, above editor */
+  text-align: center;
+  padding: 20px;
+}
+
+.empty-state-overlay.hidden {
+  display: none;
+}
+
+.empty-state-content {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-icon-circle {
+  width: 80px;
+  height: 80px;
+  background: #f8fafc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.empty-icon-circle svg {
+  width: 40px;
+  height: 40px;
+}
+
+.empty-state-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.empty-state-content p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+#emptyStateBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Search Results Styling */
+.search-result-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.search-result-item:hover {
+    border-color: #4f46e5;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-result-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.search-result-snippet {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-highlight {
+    background-color: #fef08a; /* Yellow highlight */
+    color: #854d0e;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+.search-fade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Tinted Background (Subtle Indigo) */
+    background-color: rgba(99, 102, 241, 0.08); 
+    color: #4f46e5; /* Icon acts as the accent */
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+    
+    /* Sidebar Spacing */
+    margin: 16px 16px 8px 16px;
+    border: 1px solid transparent;
+}
+
+.search-fade:hover {
+    background-color: rgba(99, 102, 241, 0.15); /* Darker tint on hover */
+    color: #4338ca;
+}
+
+.search-fade span {
+    color: #475569; /* Text remains neutral gray */
+}
+
+.search-fade .search-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
